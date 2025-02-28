@@ -1,0 +1,39 @@
+@project1_HostAddress = http://localhost:5005
+
+GET {{project1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+
+GET https://localhost:7032/api/product
+###
+GET https://localhost:7032/api/product/2
+###
+
+DELETE https://localhost:7032/api/product/3
+###
+
+
+POST https://localhost:7032/api/product
+Content-Type: application/json
+
+{
+  "name": "Rolex Watch",
+  "price": 100,
+  "categoryid":1
+}
+
+###
+GET https://localhost:7032/api/category
+
+###
+POST https://localhost:7032/api/category
+Content-Type: application/json
+{
+  "name": "Food"
+}
+
+
+
+
