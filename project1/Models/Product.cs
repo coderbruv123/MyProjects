@@ -7,7 +7,7 @@ namespace project1.Models
     {
         public int Id { get; set; }
 
-        public  string Name { get; set; }
+        public required string Name { get; set; }
         public decimal Price { get; set; }
         
         public int Quantity { set; get; }
@@ -18,6 +18,6 @@ namespace project1.Models
 
         //Navigation property for Category
         [JsonIgnore]
-        public Category Category { get; set; }    
+        public Category Category { get; set; }    = null!;
     }
 }
