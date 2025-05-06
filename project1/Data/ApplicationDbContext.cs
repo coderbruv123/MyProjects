@@ -13,6 +13,11 @@ namespace project1.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+
+        public DbSet<User> Users { get; set; } = null!;
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -21,6 +26,10 @@ namespace project1.Data
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
+         
+           
+                
+            
         }
     }
 
