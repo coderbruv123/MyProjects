@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using project1.Models;
 using Microsoft.EntityFrameworkCore;
 using project1.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace project1.Services
 {
@@ -19,7 +20,7 @@ namespace project1.Services
 
             const string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             if (!Regex.IsMatch(userDto.Email, emailPattern))
-            {
+            { 
                 return "Invalid email format";
             }
 
@@ -41,6 +42,8 @@ namespace project1.Services
                 Email = userDto.Email,
                 Password = userDto.Password
             };
+                        var hashPassword = new PasswordHasher<User>().HashPassword(user, userDto.Password);
+            user.Password = hashPassword;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -48,9 +51,23 @@ namespace project1.Services
             return "User registered successfully";
         }
 
-        public Task<User> Login(UserDTO userDto)
-        {
-            throw new NotImplementedException("Login method not implemented yet.");
-        }
+       public async Task<string?> Login(UserDTO userDto)
+    {
+    var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDto.Email);
+    if (user == null)
+    {
+        return null;
+    }
+
+    var passwordVerificationResult = new PasswordHasher<User>().VerifyHashedPassword(user, user.Password, userDto.Password);
+    if (passwordVerificationResult == PasswordVerificationResult.Failed)
+    {
+        return null;
+    }
+    return "logged in";
+
+    }
+
+        
     }
 }
