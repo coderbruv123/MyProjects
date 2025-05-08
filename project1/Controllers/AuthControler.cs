@@ -8,7 +8,7 @@ namespace project1.Controllers{
 
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController(AuthService authService) : ControllerBase
+    public class AuthController(IAuthServices authService) : ControllerBase
     {
       
         [HttpPost("register")]
@@ -37,16 +37,16 @@ namespace project1.Controllers{
                 return BadRequest(new { message = "Email and password are required" });
             }
             
-            // var user = _context.Users.FirstOrDefault(u=> u.Email == userDto.Email && u.Password == userDto.Password );
-            // if(user == null){
-            //     return Unauthorized(new {message= "Invalid email and password"});
+           
 
-            // }
+            
+            var user = authService.Login(userDto).Result;
+            if(user == null){
+                return Unauthorized(new { message = "Invalid email or password" });
+            }
 
 
-
-
-            return Ok(new { message = "User logged in successfully" });
+            return Ok(user);
         }
        
     }
