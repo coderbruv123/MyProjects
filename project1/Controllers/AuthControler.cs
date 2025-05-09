@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using project1.Data;
@@ -8,12 +9,14 @@ namespace project1.Controllers{
 
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController(IAuthServices authService) : ControllerBase
+    public class AuthController(IAuthServices authService ) : ControllerBase
     {
       
         [HttpPost("register")]
         public IActionResult Register(UserDTO userDto )
         {
+       
+
 
         
             

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using project1.Data;
 using project1.Models;
 using project1.DTO;
+using System.Security.Claims;
 
 namespace project1.Controllers
 {
@@ -29,9 +30,13 @@ namespace project1.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategiory(CategoryDTO categorydto)
+        public async Task<ActionResult<Category>> CreateCategiory(CategoryDTO categorydto,HttpContext context)
         {
 
+        var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim != null){
+            return BadRequest("User not authenticated");
+        }
             var category = new Category
             {
                 Name = categorydto.Name
