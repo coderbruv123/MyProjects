@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,11 +18,13 @@ namespace project1.Controllers
 
 
         [HttpGet]
+     
         public async Task <ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var products = await _context.Products.ToListAsync();
             return Ok(products);
         }
+
         [HttpGet("{id}")]
         public ActionResult <Product> GetProduct(int id)
         {
@@ -34,6 +37,7 @@ namespace project1.Controllers
         }
 
         [HttpPost]
+           [Authorize]
         public ActionResult <Product> CreateProduct (ProductDTO productdto)
         {
 
@@ -52,6 +56,7 @@ namespace project1.Controllers
         }
 
         [HttpDelete("{id}")]
+           [Authorize]
         public IActionResult DeleteProduct(int id)
         {
             var product = _context.Products.Find(id);
@@ -65,6 +70,7 @@ namespace project1.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult UpdateProduct(int id , Product upproduct)
         {
 

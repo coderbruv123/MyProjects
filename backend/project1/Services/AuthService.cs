@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -86,8 +85,8 @@ namespace project1.Services
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("your_secret_key_here_our_secret_key_here_our_secret_key_here"));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
-            issuer: null,
-            audience: null,
+            issuer: "issuer",
+            audience: "Audience",
             claims: claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: creds
