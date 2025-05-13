@@ -7,5 +7,6 @@ namespace project1.Models
         public required string Email { get; set; }
         public required string Password { get; set; }
         public Boolean Is_admin { get; set; } = false;
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

@@ -16,6 +16,8 @@ namespace project1.Data
 
         public DbSet<User> Users { get; set; } = null!;
 
+        public DbSet<Order> Orders { get; set; } = null!;
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,9 +28,11 @@ namespace project1.Data
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
-         
-           
-                
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Orders)
+                .WithOne(o => o.User)
+                .HasForeignKey(o => o.UserId);   
             
         }
     }
