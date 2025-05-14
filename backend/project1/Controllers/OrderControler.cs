@@ -1,6 +1,9 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project1.Data;
+using project1.DTO;
 using project1.Models;
 
 namespace project1.Controllers
@@ -20,22 +23,45 @@ namespace project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            var orders = await _context.Orders.ToListAsync();
+                        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return BadRequest("User not authenticated");
+            }
+
+            var orders = await _context.Orders.Where(o => o.UserId == int.Parse(userIdClaim.Value))
+                .ToListAsync();
             return Ok(orders);
         }
+
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
+        [Authorize]
+        public async Task<ActionResult<Order>> CreateOrder(OrderDTO order)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return BadRequest("User not authenticated");
+            }
+
             if (order == null)
             {
                 return BadRequest("Order cannot be null");
             }
 
-            await _context.Orders.AddAsync(order);
+            var order1 = new Order
+            {
+                OrderDate = DateTime.Now,
+                TotalAmount = order.TotalAmount,
+                Status = order.Status,
+                UserId = int.Parse(userIdClaim.Value)
+            };
+
+            await _context.Orders.AddAsync(order1);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOrders), new { id = order.Id }, order);
+            return CreatedAtAction(nameof(GetOrders), new { id = order1.Id }, order1);
         }
     }
-    
 }
