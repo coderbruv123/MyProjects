@@ -1,11 +1,20 @@
 import Banner from "../../Components/Banner"
+import Categories from "../../Components/Categories"
+import Featured from "../../Components/Featured"
 
 const Home = ()=>{
 
     return(
-       <div className="w-full min-h-[850px] bg-[#f0f2f3] flex items-center justify-center">
+        <div>
+
+       <div className="w-full min-h-[700px] bg-[#f0f2f3] flex items-center justify-center">
         <Banner/>
+
        </div>
+       <Featured/>
+       <Categories/>
+       
+        </div>
     )
 }
 export default Home
