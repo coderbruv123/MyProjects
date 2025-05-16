@@ -6,6 +6,7 @@ import Register from './Pages/Auth/Register/Register'
 import Home from './Pages/Home/Home'
 import Auth from './Pages/Auth/Auth/Auth'
 import Navbar from './Components/Navbar'
+import Footer from './Components/Footer'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         </Route>
         <Route path="*" element={<div>404</div>} />
    </Routes>
+   <Footer/>
         </BrowserRouter>
   )
 }

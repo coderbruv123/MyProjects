@@ -9,7 +9,6 @@
 
 .slick-prev:before,.slick-next:before{
     color: black !important;
-    background-color: red!important;
 
 }
 .slick-slide >div{

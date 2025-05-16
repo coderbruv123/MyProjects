@@ -1,4 +1,4 @@
-import { Armchair, Check,  Info, Menu, Search, ShoppingCart, User } from "lucide-react";
+import {  Check,  Info, Menu, Search, ShoppingCart, User } from "lucide-react";
 import { Link, NavLink } from "react-router";
 
 const Navbar = () => {

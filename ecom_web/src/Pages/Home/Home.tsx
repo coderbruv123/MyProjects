@@ -7,7 +7,7 @@ const Home = ()=>{
     return(
         <div>
 
-       <div className="w-full min-h-[700px] bg-[#f0f2f3] flex items-center justify-center">
+       <div className="w-full min-h-[700px] bg-[#f0f2f3] flex items-center ">
         <Banner/>
 
        </div>
