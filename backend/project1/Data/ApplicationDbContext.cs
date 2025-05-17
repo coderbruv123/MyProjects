@@ -17,6 +17,8 @@ namespace project1.Data
         public DbSet<User> Users { get; set; } = null!;
 
         public DbSet<Order> Orders { get; set; } = null!;
+        
+        public DbSet<Cart> Carts { get; set; } = null!;
 
 
 
@@ -32,8 +34,12 @@ namespace project1.Data
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Orders)
                 .WithOne(o => o.User)
-                .HasForeignKey(o => o.UserId);   
-            
+                .HasForeignKey(o => o.UserId);
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Carts)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.UserId);
+
         }
     }
 
