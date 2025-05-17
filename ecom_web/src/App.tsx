@@ -7,6 +7,7 @@ import Home from './Pages/Home/Home'
 import Auth from './Pages/Auth/Auth/Auth'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
+import Cart from './Pages/Cart/Cart'
 
 function App() {
 
@@ -19,6 +20,8 @@ function App() {
           // <AuthCheck>
             <Home/>
           } />
+
+        <Route path="/Cart" element={<Cart/>}/>
         <Route path="/Auth" element={<Auth/>} >
             <Route path="login" element={<Login/>} />
             <Route path="register" element={<Register/>} />

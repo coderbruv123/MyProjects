@@ -36,9 +36,9 @@ const Navbar = () => {
 
                     <div className="navbar_middle_right flex items-center gap-4">
 
-                        <button className="btn capitalize">
+                        <Link to="/Cart" className="btn capitalize">
                             <ShoppingCart /> 
-                        </button>
+                        </Link>
                   
 
                         <div className="dropdown">
