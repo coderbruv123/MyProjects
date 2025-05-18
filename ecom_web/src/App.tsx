@@ -1,6 +1,5 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import AuthCheck from './AuthCheck/AuthCheck'
 import Login from './Pages/Auth/Login/Login'
 import Register from './Pages/Auth/Register/Register'
 import Home from './Pages/Home/Home'
