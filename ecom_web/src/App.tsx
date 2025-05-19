@@ -1,35 +1,55 @@
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Login from './Pages/Auth/Login/Login'
-import Register from './Pages/Auth/Register/Register'
-import Home from './Pages/Home/Home'
-import Auth from './Pages/Auth/Auth/Auth'
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
+import Home from './Pages/Home/Home'
 import Cart from './Pages/Cart/Cart'
+import Auth from './Pages/Auth/Auth/Auth'
+import Login from './Pages/Auth/Login/Login'
+import Register from './Pages/Auth/Register/Register'
+import Profile from './Pages/Profile/Profile'
+import Product from './Pages/Product/Product'
 
-function App() {
-
+function MainLayout() {
   return (
-   <BrowserRouter>
-   <Navbar/>
-   <Routes>
-
-        <Route path="/" element={
-          // <AuthCheck>
-            <Home/>
-          } />
-
-        <Route path="/Cart" element={<Cart/>}/>
-        <Route path="/Auth" element={<Auth/>} >
-            <Route path="login" element={<Login/>} />
-            <Route path="register" element={<Register/>} />
-        </Route>
-        <Route path="*" element={<div>404</div>} />
-   </Routes>
-   <Footer/>
-        </BrowserRouter>
-  )
+    <>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </>
+  );
 }
 
-export default App
+function AuthLayout() {
+  return <Outlet />;
+}
+function  ProfileLayout() {
+  return <Outlet/>
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/product" element={<Product />} />
+          <Route path ="/Account" element={<ProfileLayout/>} >
+          <Route path="Cart" element={<Cart />} />
+          <Route path="profile" element={<Profile/>} />
+          </Route>
+
+
+        </Route>
+        {/* Auth layout without Navbar and Footer */}
+        <Route path="/Auth" element={<AuthLayout />}>
+          <Route index element={<Auth />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+        <Route path="*" element={<div>404</div>} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;

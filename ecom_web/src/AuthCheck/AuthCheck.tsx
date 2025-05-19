@@ -7,6 +7,7 @@ type AuthCheckProps = {
 };
 
 const AuthCheck = ({ children }: AuthCheckProps) => {
+    
     const isAuthenticate = false;
     const location = useLocation();
     const navigate = useNavigate();

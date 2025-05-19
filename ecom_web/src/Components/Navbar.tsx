@@ -28,7 +28,7 @@ const Navbar = () => {
 
                     <div className="search_box">
                         <form action="#" className="max-w-[443px] h-[44px] relative">
-                            <input type="text" placeholder="Search here..." className="max-w-[443px] w-full h-full bg-white rounded-lg  pl-4" />
+                            <input type="text" placeholder="Search here..." className="max-w-[443px] w-full h-full bg-white text-black rounded-lg  pl-4" />
 
                             <button className="absolute to-50% right-4 translate-y-1/2"><Search size='22px' color="#272343" /></button>
                         </form>
@@ -36,7 +36,7 @@ const Navbar = () => {
 
                     <div className="navbar_middle_right flex items-center gap-4">
 
-                        <Link to="/Cart" className="btn capitalize">
+                        <Link to="/Account/Cart" className="btn capitalize">
                             <ShoppingCart /> 
                         </Link>
                   
@@ -44,7 +44,7 @@ const Navbar = () => {
                         <div className="dropdown">
                             <div tabIndex={0} role="button" className="btn m-1"><User /></div>
                             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                <li><Link to={""}>Account</Link></li>
+                                <li><Link to={"/Account/profile"}>Account</Link></li>
                                 <li><Link to={""}>Logout</Link></li>
                             </ul>
                         </div>
@@ -71,9 +71,8 @@ const Navbar = () => {
 
                         <nav className="flex items-center gap-8">
                             <NavLink to='/' className='text-sm text-[#029fae] font-inter font-medium capitalize'>Home</NavLink>
-                            <NavLink className='text-sm text-[#636270] font-inter font-medium capitalize' to={""}>shop</NavLink>
-                            <NavLink className='text-sm text-[#636270] font-inter font-medium capitalize' to={""}>product</NavLink>
-                            <NavLink className='text-sm text-[#636270] font-inter font-medium capitalize' to={""}>about</NavLink>
+                            <NavLink className='text-sm text-[#636270] font-inter font-medium capitalize' to={"/product"}>product</NavLink>
+                            <NavLink className='text-sm text-[#636270] font-inter font-medium capitalize' to={"/about"}>about</NavLink>
                         </nav>
                     </div>
 
