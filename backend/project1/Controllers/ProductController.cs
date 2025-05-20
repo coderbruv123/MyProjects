@@ -37,7 +37,7 @@ namespace project1.Controllers
         }
 
         [HttpPost]
-           [Authorize]
+        //    [Authorize]
         public ActionResult <Product> CreateProduct (ProductDTO productdto)
         {
 

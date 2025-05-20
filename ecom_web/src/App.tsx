@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet,  } from 'react-router-dom'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import Home from './Pages/Home/Home'
@@ -8,6 +8,8 @@ import Login from './Pages/Auth/Login/Login'
 import Register from './Pages/Auth/Register/Register'
 import Profile from './Pages/Profile/Profile'
 import Product from './Pages/Product/Product'
+import ProtectedRoute from './AuthCheck/AuthCheck'
+import Aboutinfo from './Pages/About/Aboutinfo'
 
 function MainLayout() {
   return (
@@ -22,9 +24,11 @@ function MainLayout() {
 function AuthLayout() {
   return <Outlet />;
 }
-function  ProfileLayout() {
-  return <Outlet/>
+function ProfileLayout() {
+  return <Outlet />;
 }
+
+
 
 function App() {
   return (
@@ -33,14 +37,26 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />
-          <Route path ="/Account" element={<ProfileLayout/>} >
-          <Route path="Cart" element={<Cart />} />
-          <Route path="profile" element={<Profile/>} />
+          <Route path="/about" element={<Aboutinfo/>} />
+          <Route path="/Account" element={<ProfileLayout />}>
+            <Route
+              path="Cart"
+              element={
+                <ProtectedRoute>
+                  <Cart />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
           </Route>
-
-
         </Route>
-        {/* Auth layout without Navbar and Footer */}
         <Route path="/Auth" element={<AuthLayout />}>
           <Route index element={<Auth />} />
           <Route path="login" element={<Login />} />

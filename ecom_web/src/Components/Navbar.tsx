@@ -1,7 +1,19 @@
 import {  Check,  Info, Menu, Search, ShoppingCart, User } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
+import { getCategories } from "../api/categoryApi";
+import type { Category } from "../types/Category";
 
 const Navbar = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+    
+      useEffect(() => {
+        getCategories()
+          .then(setCategories)
+         
+      }, []);
+
+
     return (
         <div>
             <div className="navbar_top flex items-center justify-center bg-[#272343] h-[45px] w-full">
@@ -45,7 +57,17 @@ const Navbar = () => {
                             <div tabIndex={0} role="button" className="btn m-1"><User /></div>
                             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                 <li><Link to={"/Account/profile"}>Account</Link></li>
-                                <li><Link to={""}>Logout</Link></li>
+                                <li>
+                                    <button
+                                        onClick={() => {
+                                            localStorage.removeItem("token");
+                                            sessionStorage.removeItem("token");
+                                            window.location.href = "/";
+                                        }}
+                                    >
+                                        Logout
+                                    </button>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -61,11 +83,13 @@ const Navbar = () => {
                         <div className="dropdown dropdown-start">
                             <div tabIndex={0} role="button" className="btn m-1 flex items-center gap-5 capitalize"> <Menu /> all categories</div>
                             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                <li><a>Chair</a></li>
-                                <li><a>Pant</a></li>
-                                <li><a>Shirt</a></li>
-                                <li><a>T-Shirt</a></li>
-                                <li><a>T-Shirt</a></li>
+                              {
+                                categories.map((category) => (
+                                    <li key={category.id}>
+                                        <a className="capitalize">{category.name}</a>
+                                    </li>
+                                ))
+                              }
                             </ul>
                         </div>
 

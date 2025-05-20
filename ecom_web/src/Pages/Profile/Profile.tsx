@@ -1,7 +1,7 @@
 const Profile = () => {
   // Example static user data
   const user = {
-    name: "Prashang giri",
+    name: "Prashant giri",
     email: "giripras@gmail.com",
     phone: "980000000",
     address: "nepal",

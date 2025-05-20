@@ -30,13 +30,10 @@ namespace project1.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategiory(CategoryDTO categorydto,HttpContext context)
+        public async Task<ActionResult<Category>> CreateCategiory(CategoryDTO categorydto)
         {
 
-        var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier);
-        if (userIdClaim != null){
-            return BadRequest("User not authenticated");
-        }
+      
             var category = new Category
             {
                 Name = categorydto.Name
