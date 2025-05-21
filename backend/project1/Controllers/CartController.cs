@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project1.Data;
+using project1.DTO;
 using project1.Models;
 
 namespace project1.Controllers
@@ -19,9 +20,16 @@ namespace project1.Controllers
         }
 
 
-        [HttpGet("cart/{userId}")]
-        public async Task<IActionResult> GetCart(int userId)
+        [HttpGet]
+        public async Task<IActionResult> GetCart()
+
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return BadRequest("User not authenticated");
+            }
+            var userId = int.Parse(userIdClaim.Value);
             var cart = await _context.Carts.Include(c => c.CartItems)
                                             .ThenInclude(ci => ci.Product)
                                             .FirstOrDefaultAsync(c => c.UserId == userId);
@@ -29,7 +37,22 @@ namespace project1.Controllers
             {
                 return NotFound("Cart not found");
             }
-            return Ok(cart);
+
+            var cartDto = new CartResponseDto
+            {
+                Id = cart.Id,
+                UserId = cart.UserId,
+                TotalPrice = cart.TotalPrice,
+                CartItems = cart.CartItems.Select(ci => new CartItemDto
+                {
+                    ProductId = ci.ProductId,
+                    Quantity = ci.Quantity,
+                    Price = ci.Price,
+                    ProductName = ci.ProductName 
+                }).ToList()
+            };
+
+            return Ok(cartDto);
         }
         [HttpPost("cart/add")]
         public async Task<IActionResult> AddToCart()
@@ -50,8 +73,64 @@ namespace project1.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetCart), new { userId = cart.UserId }, cart);
         }
-        
 
-       
+        [HttpPost("cart/item")]
+        public async Task<IActionResult> AddCartItem([FromBody] CartItemDto cartItemDto)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return BadRequest("User not authenticated");
+            }
+            var userId = int.Parse(userIdClaim.Value);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                return NotFound("Cart not found");
+            }
+
+            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == cartItemDto.ProductId);
+            if (existingItem != null)
+            {
+                existingItem.Quantity += cartItemDto.Quantity;
+            }
+            else
+            {
+                cart.CartItems.Add(new CartItem
+                {
+                    ProductId = cartItemDto.ProductId,
+                    Quantity = cartItemDto.Quantity,
+                    Price = cartItemDto.Price,
+                    ProductName = cartItemDto.ProductName,
+                
+
+                });
+            }
+
+            cart.TotalPrice = cart.CartItems.Sum(ci => ci.Price * ci.Quantity);
+
+            await _context.SaveChangesAsync();
+
+            var cartDto = new CartResponseDto
+            {
+                Id = cart.Id,
+                UserId = cart.UserId,
+                TotalPrice = cart.TotalPrice,
+                CartItems = cart.CartItems.Select(ci => new CartItemDto
+                {
+                    ProductId = ci.ProductId,
+                    Quantity = ci.Quantity,
+                    Price = ci.Price,
+                    ProductName = ci.ProductName
+                }).ToList()
+            };
+
+            return Ok(cartDto);
+        }
+
+     
     }
- }
+}
