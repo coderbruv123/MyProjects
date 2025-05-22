@@ -30,29 +30,31 @@ namespace project1.Controllers
                 return BadRequest("User not authenticated");
             }
             var userId = int.Parse(userIdClaim.Value);
-            var cart = await _context.Carts.Include(c => c.CartItems)
-                                            .ThenInclude(ci => ci.Product)
-                                            .FirstOrDefaultAsync(c => c.UserId == userId);
-            if (cart == null)
+        var carts = await _context.Carts
+                   .Include(c => c.CartItems)
+                   .ThenInclude(ci => ci.Product)
+                  .Where(c => c.UserId == userId)
+                .ToListAsync();
+            if (carts == null || carts.Count==0)
             {
                 return NotFound("Cart not found");
             }
 
-            var cartDto = new CartResponseDto
-            {
-                Id = cart.Id,
-                UserId = cart.UserId,
-                TotalPrice = cart.TotalPrice,
-                CartItems = cart.CartItems.Select(ci => new CartItemDto
-                {
-                    ProductId = ci.ProductId,
-                    Quantity = ci.Quantity,
-                    Price = ci.Price,
-                    ProductName = ci.ProductName 
-                }).ToList()
-            };
+            var cartDtos = carts.Select(cart => new CartResponseDto
+    {
+        Id = cart.Id,
+        UserId = cart.UserId,
+        TotalPrice = cart.TotalPrice,
+        CartItems = cart.CartItems.Select(ci => new CartItemDto
+        {
+            ProductId = ci.ProductId,
+            Quantity = ci.Quantity,
+            Price = ci.Price,
+            ProductName = ci.ProductName
+        }).ToList()
+    }).ToList();
 
-            return Ok(cartDto);
+            return Ok(cartDtos);
         }
         [HttpPost("cart/add")]
         public async Task<IActionResult> AddToCart()
