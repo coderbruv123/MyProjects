@@ -14,6 +14,7 @@ export const getCart = async (): Promise<Cart[] | null> => {
 
 export const addCart = async (): Promise<Cart |null>=>{
   try{
+
     const response = await axios.post<Cart>(`/Cart/cart/add`);
     console.log(response)
     return response.data;

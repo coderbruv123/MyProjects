@@ -11,9 +11,12 @@ namespace project1.Models
         public decimal Price { get; set; }
         
         public int Quantity { set; get; }
+        public string? ImagePath{ get; set; }
 
         //Foreign key
         public int CategoryId { get; set; }
+
+        
 
 
         //Navigation property for Category

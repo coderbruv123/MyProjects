@@ -21,6 +21,7 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
 
     const filteredProducts = selectedCategory == null
         ? products  : products.filter(product => product.categoryId === selectedCategory);
+        console.log(filteredProducts);
     return (
         <div>
             <h1>Product List</h1>
@@ -34,7 +35,7 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
               <div className="bg-white h-[420px] w-full rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
                 <div className="h-56 w-full rounded-t-xl bg-indigo-100 flex justify-center items-center">
                   <img
-                    src=""
+                    src={`https://localhost:7032/${product.imagePath}`}
                     alt={product.name}
                     className="h-44 w-44 object-contain"
                   />

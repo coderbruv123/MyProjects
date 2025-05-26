@@ -1,3 +1,5 @@
+import AddProduct from "../../Components/Admins/AddProduct";
+
 const Profile = () => {
   // Example static user data
   const user = {
@@ -36,6 +38,7 @@ const Profile = () => {
           </button>
         </div>
       </div>
+      <AddProduct/>
     </div>
   );
 };

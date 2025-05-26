@@ -1,5 +1,5 @@
 import axios from './axiosInstancs';
-import type { Product } from '../types/Product';
+import type { Product, ProductFormData } from '../types/Product';
 
 
 export const getProducts = async (): Promise<Product[]> => {
@@ -17,8 +17,22 @@ export const getProductById = async(id:number): Promise<Product> => {
     return res.data;
 };
 
-export const createProduct = async (product: Product): Promise<Product> => {
-    const res = await axios.post<Product>('/Product', product);
+export const createProduct = async (product: ProductFormData): Promise<Product> => {
+        const formData = new FormData();
+    formData.append('name',product.name);
+ formData.append('name', product.name);
+    formData.append('price', product.price.toString());
+    formData.append('categoryId',product.categoryId.toString());
+    formData.append('quantity',product.quantity.toString());
+    if(product.image && product.image instanceof File ){
+        formData.append('image',product.image);
+
+    }
+    const res = await axios.post<Product>('/Product', formData, {
+        headers:{
+            'Content-Type':'multipart/form-data',
+        }
+    });
     return res.data;
 };
 

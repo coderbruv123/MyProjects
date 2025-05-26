@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,15 +39,33 @@ namespace project1.Controllers
 
         [HttpPost]
         //    [Authorize]
-        public ActionResult <Product> CreateProduct (ProductDTO productdto)
+        public  async Task<ActionResult <Product>> CreateProduct ([FromForm]ProductDTO productdto)
         {
+            string imagePath = null;
+
+            if (productdto.Image != null && productdto.Image.Length > 0)
+            {
+                var uploaderFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(productdto.Image.FileName);
+                var filepath = Path.Combine(uploaderFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filepath, FileMode.Create))
+                {
+                    await productdto.Image.CopyToAsync(stream);
+                }
+                imagePath = "/images/" + uniqueFileName;
+
+                    }
+            
 
             var product = new Product
             {
                 Name = productdto.Name,
                 Price = productdto.Price,
                 CategoryId = productdto.CategoryId,
-                Quantity = productdto.Quantity
+                Quantity = productdto.Quantity,
+                ImagePath= imagePath
 
             };
             _context.Products.Add(product);

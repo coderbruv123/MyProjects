@@ -32,7 +32,7 @@ namespace project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategiory(CategoryDTO categorydto)
         {
-
+            
       
             var category = new Category
             {
