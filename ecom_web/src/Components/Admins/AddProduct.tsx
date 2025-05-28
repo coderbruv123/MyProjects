@@ -40,7 +40,7 @@ const AddProduct: React.FC = () => {
     }
   };
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-white">
+      <div className="flex justify-center items-center text-black min-h-screen bg-gradient-to-br from-indigo-100 to-white">
     <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
       <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center">Create Product</h2>
       <form onSubmit={handleSubmit} className="space-y-5">

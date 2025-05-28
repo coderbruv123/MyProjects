@@ -10,6 +10,7 @@ import Profile from './Pages/Profile/Profile'
 import Product from './Pages/Product/Product'
 import ProtectedRoute from './AuthCheck/AuthCheck'
 import Aboutinfo from './Pages/About/Aboutinfo'
+import Dashboard from './Pages/Admin/Dashboard'
 
 function MainLayout() {
   return (
@@ -48,11 +49,17 @@ function App() {
               }
             />
             <Route
+              path="Dashboard"
+              element={
+                  <Dashboard />
+              }
+            />
+            <Route
               path="profile"
               element={
-                // <ProtectedRoute>
+                <ProtectedRoute>
                   <Profile />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               }
             />
           </Route>

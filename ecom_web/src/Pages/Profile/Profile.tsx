@@ -1,7 +1,5 @@
-import AddProduct from "../../Components/Admins/AddProduct";
 
 const Profile = () => {
-  // Example static user data
   const user = {
     name: "Prashant giri",
     email: "giripras@gmail.com",
@@ -38,7 +36,6 @@ const Profile = () => {
           </button>
         </div>
       </div>
-      <AddProduct/>
     </div>
   );
 };

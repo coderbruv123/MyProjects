@@ -16,7 +16,6 @@ namespace project1.Services
 
         public async Task<string> Register(UserDTO userDto)
         {
-            // Validate input
             if (string.IsNullOrEmpty(userDto.Name) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Password))
             {
                 return "All fields are required";

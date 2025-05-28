@@ -1,4 +1,3 @@
-import React from 'react'
 import AddProduct from '../../Components/Admins/AddProduct'
 
 const Dashboard = () => {

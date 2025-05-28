@@ -1,36 +1,33 @@
 const Banner = () => {
+    const products = {
+        id: 1,
+        title: "Best Type of Products available on the internet",
+        subTitle: "Upgrade your space today",
+        image: "https://media.istockphoto.com/id/1168952666/photo/retro-vintage-wooden-chair-isolated-on-white-including-clipping-path.jpg?s=612x612&w=0&k=20&c=DgbWcMoVMczq814LCSXAjVGoxzRyIl9BY4jcEpTmb4w="
+    };
 
-    const products = 
-        {
-            id: 1,
-            title: "Best Type of Products available on the internet",
-            subTitle: "Upgrade your space today",
-            image: "https://media.istockphoto.com/id/1168952666/photo/retro-vintage-wooden-chair-isolated-on-white-including-clipping-path.jpg?s=612x612&w=0&k=20&c=DgbWcMoVMczq814LCSXAjVGoxzRyIl9BY4jcEpTmb4w="
-        };
-      
-    
-
-  
     return (
-        <div className="lg:container">
-            <div className="w-full h-full">
-                <div className="px-6">
-                    <div
-                        key={products.id}
-                        className="relative flex flex-wrap gap-10 justify-center w-full min-h-[400px] bg-gray-100 items-stretch"
-                    >
-                        <div className="text-black w-full md:w-3/5  justify-center">
-                            <h2 className="text-4xl md:text-7xl font-bold">{products.title}</h2>
-                            <p className="mt-2">{products.subTitle}</p>
-                            <button className="mt-4 bg-black text-white px-4 py-2 rounded">Shop Now</button>
-                        </div>
-                        <div className="w-full md:w-auto h-full flex items-center justify-center">
-                            <img
-                                src={products.image}
-                                alt={products.title}
-                                className="w-full h-full object-contain max-h-[400px]"
-                            />
-                        </div>
+        <div className="w-full bg-gradient-to-r from-indigo-100 via-white to-pink-100 py-1">
+            <div className="container mx-auto px-4">
+                <div
+                    key={products.id}
+                    className="relative flex flex-col md:flex-row items-center justify-between bg-white rounded-3xl shadow-2xl p-8 md:p-12 gap-8"
+                >
+                    <div className="flex-1 text-center md:text-left">
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight drop-shadow">
+                            {products.title}
+                        </h2>
+                        <p className="text-lg md:text-2xl text-gray-600 mb-6">{products.subTitle}</p>
+                        <button className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow transition duration-200">
+                            Shop Now
+                        </button>
+                    </div>
+                    <div className="flex-1 flex items-center justify-center">
+                        <img
+                            src={products.image}
+                            alt={products.title}
+                            className="w-72 h-72 md:w-96 md:h-96 object-contain rounded-2xl shadow-lg border border-gray-200 bg-white"
+                        />
                     </div>
                 </div>
             </div>
