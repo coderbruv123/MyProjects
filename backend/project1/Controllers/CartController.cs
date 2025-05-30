@@ -76,8 +76,8 @@ namespace project1.Controllers
             return CreatedAtAction(nameof(GetCart), new { userId = cart.UserId }, cart);
         }
 
-        [HttpPost("cart/item")]
-        public async Task<IActionResult> AddCartItem([FromBody] CartItemDto cartItemDto)
+        [HttpPost("cart/item/{id}")]
+        public async Task<IActionResult> AddCartItem(int id, CartItemDto cartItemDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -85,7 +85,7 @@ namespace project1.Controllers
                 return BadRequest("User not authenticated");
             }
             var userId = int.Parse(userIdClaim.Value);
-            var cart = await _context.Carts
+            var cart = await _context.Carts.Where(c => c.Id == id)
                 .Include(c => c.CartItems)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import type { Product } from '../../types/Product'
 import { getProducts } from '../../api/productApi';
-import { getCart } from '../../api/cartApi'; // <-- Import your carts API
+import { addCartItems, getCart } from '../../api/cartApi';
 import { ShoppingCart } from 'lucide-react';
-import type { Cart } from '../../types/Cart';
+import type { Cart, CartItem } from '../../types/Cart';
 
-interface ProductListProps{
+interface ProductListProps {
     selectedCategory: number | null;
 }
 
-const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
+const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -27,7 +27,8 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
     }, []);
 
     const filteredProducts = selectedCategory == null
-        ? products  : products.filter(product => product.categoryId === selectedCategory);
+        ? products
+        : products.filter(product => product.categoryId === selectedCategory);
 
     const handleAddToCartClick = (product: Product) => {
         setSelectedProduct(product);
@@ -36,9 +37,24 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
         setQuantity(1);
     };
 
-    const handleModalSubmit = () => {
-        alert(`Added ${quantity} of "${selectedProduct?.name}" to "${carts.find(c => c.id === selectedCart)?.id}"`);
-        setShowModal(false);
+    const handleModalSubmit = async () => {
+        if (!selectedProduct || !selectedCart) return;
+
+        const newItem: CartItem = {
+            cartId: selectedCart,
+            productId: selectedProduct.id,
+            quantity,
+            price: selectedProduct.price
+        };
+
+        try {
+            await addCartItems(newItem); // <-- API call
+            alert(`Added ${quantity} of "${selectedProduct.name}" to Cart ${selectedCart}`);
+            setShowModal(false);w
+        } catch (error) {
+            console.error("Error adding item to cart", error);
+            alert("Failed to add item to cart");
+        }
     };
 
     return (
@@ -79,6 +95,7 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 text-black">
                     <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
                         <h2 className="text-xl font-bold mb-4">Add to Cart</h2>
+                        <p className="mb-2">Product Id: <span className="font-semibold">{selectedProduct.id}</span></p>
                         <p className="mb-2">Product: <span className="font-semibold">{selectedProduct.name}</span></p>
                         <div className="mb-4">
                             <label className="block mb-1 font-medium">Select Cart:</label>
@@ -88,7 +105,9 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
                                 onChange={e => setSelectedCart(Number(e.target.value))}
                             >
                                 {carts.map(cart => (
-                                    <option key={cart.id} value={cart.id}>{cart.id}</option>
+                                    <option key={cart.id} value={cart.id}>
+                                        {`Cart ${cart.id}`}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -99,8 +118,11 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
                                 min={1}
                                 className="w-full border rounded px-2 py-1"
                                 value={quantity}
-                                onChange={e => setQuantity(Number(e.target.value))}
+                                onChange={e => setQuantity(Math.max(1, Number(e.target.value)))}
                             />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-1 font-medium">Price per unit: Rs {selectedProduct.price}</label>
                         </div>
                         <div className="flex justify-end gap-2">
                             <button
@@ -122,6 +144,6 @@ const ProductList: React.FC<ProductListProps> = ({selectedCategory}) => {
             )}
         </div>
     );
-}
+};
 
-export default ProductList
+export default ProductList;

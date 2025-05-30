@@ -1,5 +1,5 @@
 import axios from "./axiosInstancs";
-import type {  Cart} from '../types/Cart'
+import type {  Cart, CartItem} from '../types/Cart'
 
 export const getCart = async (): Promise<Cart[] | null> => {
   try {
@@ -25,3 +25,14 @@ export const addCart = async (): Promise<Cart |null>=>{
   }
 }
 
+export const addCartItems = async (item:CartItem ): Promise< CartItem | undefined >=>{
+  try{
+
+    const res = await axios.post<CartItem>('/Cart/cart/item',item);
+    return res.data;
+
+  }
+  catch (error){
+    console.log("Error adding cart:" , error)
+  }
+}
