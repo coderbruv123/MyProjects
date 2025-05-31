@@ -41,7 +41,7 @@ const CartPage = () => {
         <PlusCircle size={20} /> Add Cart
       </button>
 
-      <div className=" grid  grid-cols-3 gap-4">
+      <div className=" grid  grid-cols-1 gap-4">
         {carts ? (
           carts.length === 0 ? (
             <p className="text-gray-500 mt-2">No carts found.</p>

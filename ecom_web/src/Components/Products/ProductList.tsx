@@ -41,16 +41,17 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
         if (!selectedProduct || !selectedCart) return;
 
         const newItem: CartItem = {
-            cartId: selectedCart,
             productId: selectedProduct.id,
             quantity,
-            price: selectedProduct.price
+            price: selectedProduct.price,
+            productName: selectedProduct.name,
+            id: selectedCart
         };
 
         try {
-            await addCartItems(newItem); // <-- API call
+            await addCartItems(selectedCart,newItem); 
             alert(`Added ${quantity} of "${selectedProduct.name}" to Cart ${selectedCart}`);
-            setShowModal(false);w
+            setShowModal(false);
         } catch (error) {
             console.error("Error adding item to cart", error);
             alert("Failed to add item to cart");
