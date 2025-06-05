@@ -38,7 +38,7 @@ const Login = () => {
       );
       
       console.log(res.data);
-            localStorage.setItem("token", res.data);
+            localStorage.setItem("user", res.data);
                   navigate("/"); 
 
 
@@ -52,17 +52,35 @@ const Login = () => {
     }
   };
 
-  return (
-    <div className="flex flex-col items-center">
-      <h1>Login Page</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-5 py-4">
-          <input onChange={handleChange} name="email" type="text" className="bg-white text-black" placeholder="email" />
-          <input onChange={handleChange} type="password" name="password" className="bg-white text-black" placeholder="password" />
-        </div>
-        <button type="submit" className="bg-blue-600 px-3">Submit</button>
+return (
+  <div className="flex items-center justify-center  ">
+    <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+      <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Login</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5 ">
+        <input
+          onChange={handleChange}
+          name="email"
+          type="text"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+          placeholder="Email"
+        />
+        <input
+          onChange={handleChange}
+          name="password"
+          type="password"
+          className="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+          placeholder="Password"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+        >
+          Submit
+        </button>
       </form>
     </div>
-  );
+  </div>
+);
+
 };
 export default Login;

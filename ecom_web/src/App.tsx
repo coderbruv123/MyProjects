@@ -22,9 +22,7 @@ function MainLayout() {
   );
 }
 
-function AuthLayout() {
-  return <Outlet />;
-}
+
 function ProfileLayout() {
   return <Outlet />;
 }
@@ -64,7 +62,7 @@ function App() {
             />
           </Route>
         </Route>
-        <Route path="/Auth" element={<AuthLayout />}>
+        <Route path="/Auth" element={<Auth />}>
           <Route index element={<Auth />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />

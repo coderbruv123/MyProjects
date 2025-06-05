@@ -57,14 +57,18 @@ const CartPage = () => {
                   ) : (
                     <div>
                       {cart.cartItems.map((item: CartItem) => (
-                        <div key={item.id} className="text-black flex gap-1">
-                         
-                          <div className="flex flex-col">
+                        <div key={item.id} className="text-black bg-white flex gap-2">
+                          <div>
+                                <img className="h-20 w-20" src=""/>
+                            </div>
+
+                          <div className="flex flex-col w-20">
                             <h3>{item.productName}</h3>
-                            <h3>Product ID: {item.productId}</h3>
-                            <h3>Quantity: {item.quantity}</h3>
-                            <h3>Price per: {item.price}</h3>
+                            <h3> Rs {item.price}</h3>
                           </div>
+                          <div>
+                          <h3>{item.quantity}</h3>
+                            </div>
                           <div>
                             <h1>Total: {item.price * item.quantity}</h1>
                             <button className="bg-blue-500 text-white">order</button>

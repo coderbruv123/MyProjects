@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project1.Data;
@@ -21,6 +22,7 @@ namespace project1.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetCart()
 
         {
@@ -30,32 +32,34 @@ namespace project1.Controllers
                 return BadRequest("User not authenticated");
             }
             var userId = int.Parse(userIdClaim.Value);
-        var carts = await _context.Carts
-                   .Include(c => c.CartItems)
-                   .ThenInclude(ci => ci.Product)
-                  .Where(c => c.UserId == userId)
-                .ToListAsync();
-            if (carts == null || carts.Count==0)
+            var carts = await _context.Carts
+                       .Include(c => c.CartItems)
+                       .ThenInclude(ci => ci.Product)
+                      .Where(c => c.UserId == userId)
+                    .ToListAsync();
+            if (carts == null || carts.Count == 0)
             {
                 return NotFound("Cart not found");
             }
 
             var cartDtos = carts.Select(cart => new CartResponseDto
-    {
-        Id = cart.Id,
-        UserId = cart.UserId,
-        TotalPrice = cart.TotalPrice,
-        CartItems = cart.CartItems.Select(ci => new CartItemDto
-        {
-            ProductId = ci.ProductId,
-            Quantity = ci.Quantity,
-            Price = ci.Price,
-            ProductName = ci.ProductName
-        }).ToList()
-    }).ToList();
+            {
+                Id = cart.Id,
+                UserId = cart.UserId,
+                TotalPrice = cart.TotalPrice,
+                CartItems = cart.CartItems.Select(ci => new CartItemDto
+                {
+                    ProductId = ci.ProductId,
+                    Quantity = ci.Quantity,
+                    Price = ci.Price,
+                    ProductName = ci.ProductName
+                }).ToList()
+            }).ToList();
 
             return Ok(cartDtos);
         }
+
+        [Authorize]
         [HttpPost("cart/add")]
         public async Task<IActionResult> AddToCart()
         {
@@ -76,6 +80,7 @@ namespace project1.Controllers
             return CreatedAtAction(nameof(GetCart), new { userId = cart.UserId }, cart);
         }
 
+        [Authorize]
         [HttpPost("cart/item/{id}")]
         public async Task<IActionResult> AddCartItem(int id, CartItemDto cartItemDto)
         {
@@ -103,6 +108,7 @@ namespace project1.Controllers
             {
                 cart.CartItems.Add(new CartItem
                 {
+                    ImageUrl = cartItemDto.ImageUrl,
                     ProductId = cartItemDto.ProductId,
                     Quantity = cartItemDto.Quantity,
                     Price = cartItemDto.Price,
@@ -123,6 +129,7 @@ namespace project1.Controllers
                 TotalPrice = cart.TotalPrice,
                 CartItems = cart.CartItems.Select(ci => new CartItemDto
                 {
+                    ImageUrl = ci.ImageUrl,
                     ProductId = ci.ProductId,
                     Quantity = ci.Quantity,
                     Price = ci.Price,

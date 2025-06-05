@@ -4,6 +4,7 @@ import { getProducts } from '../../api/productApi';
 import { addCartItems, getCart } from '../../api/cartApi';
 import { ShoppingCart } from 'lucide-react';
 import type { Cart, CartItem } from '../../types/Cart';
+import ProtectedRoute from '../../AuthCheck/AuthCheck';
 
 interface ProductListProps {
     selectedCategory: number | null;
@@ -93,9 +94,12 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
             )}
 
             {showModal && selectedProduct && (
+                    <ProtectedRoute>
+
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 text-black">
                     <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
                         <h2 className="text-xl font-bold mb-4">Add to Cart</h2>
+                        <img src= {`https://localhost:7032/${selectedProduct.imagePath}`} className='w-20 h-26'></img>
                         <p className="mb-2">Product Id: <span className="font-semibold">{selectedProduct.id}</span></p>
                         <p className="mb-2">Product: <span className="font-semibold">{selectedProduct.name}</span></p>
                         <div className="mb-4">
@@ -104,7 +108,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                                 className="w-full border rounded px-2 py-1"
                                 value={selectedCart ?? ''}
                                 onChange={e => setSelectedCart(Number(e.target.value))}
-                            >
+                                >
                                 {carts.map(cart => (
                                     <option key={cart.id} value={cart.id}>
                                         {`Cart ${cart.id}`}
@@ -120,7 +124,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                                 className="w-full border rounded px-2 py-1"
                                 value={quantity}
                                 onChange={e => setQuantity(Math.max(1, Number(e.target.value)))}
-                            />
+                                />
                         </div>
                         <div className="mb-4">
                             <label className="block mb-1 font-medium">Price per unit: Rs {selectedProduct.price}</label>
@@ -129,19 +133,20 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                             <button
                                 className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
                                 onClick={() => setShowModal(false)}
-                            >
+                                >
                                 Cancel
                             </button>
                             <button
                                 className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
                                 onClick={handleModalSubmit}
                                 disabled={!selectedCart}
-                            >
+                                >
                                 Add
                             </button>
                         </div>
                     </div>
                 </div>
+                                </ProtectedRoute>
             )}
         </div>
     );
