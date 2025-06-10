@@ -28,68 +28,79 @@ const CartPage = () => {
     }
   };
 
-  return (
-    <div className="h-screen p-4 flex flex-col gap-4">
-      <h1 className="text-5xl flex items-center justify-center">
-        <ShoppingBagIcon size={45} /> My Cart
-      </h1>
+ return (
+  <div className="min-h-screen p-6 bg-gray-100">
+    <h1 className="text-4xl font-bold text-center flex items-center justify-center gap-2 mb-6 text-blue-800">
+      <ShoppingBagIcon size={40} /> My Cart
+    </h1>
 
-      <button
-        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded w-fit self-center hover:bg-blue-700 transition"
-        onClick={handleAddCart}
-      >
-        <PlusCircle size={20} /> Add Cart
-      </button>
+    <button
+      className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-full mx-auto hover:bg-blue-700 transition shadow"
+      onClick={handleAddCart}
+    >
+      <PlusCircle size={20} /> Add New Cart
+    </button>
 
-      <div className=" grid  grid-cols-1 gap-4">
-        {carts ? (
-          carts.length === 0 ? (
-            <p className="text-gray-500 mt-2">No carts found.</p>
-          ) : (
-            carts.map((cart) => (
-              <div key={cart.id} className="bg-white rounded shadow p-4">
-                <h2 className="bg-blue-400 text-white flex items-center justify-center px-2 py-1 rounded">
-                  Cart #{cart.id}
-                </h2>
-                <div className="bg-red-100 my-2">
-                  {!cart.cartItems || cart.cartItems.length === 0 ? (
-                    <p className="text-gray-500 mt-2">No items in this cart.</p>
-                  ) : (
-                    <div>
-                      {cart.cartItems.map((item: CartItem) => (
-                        <div key={item.id} className="text-black bg-white flex gap-2">
-                          <div>
-                                <img className="h-20 w-20" src=""/>
-                            </div>
-
-                          <div className="flex flex-col w-20">
-                            <h3>{item.productName}</h3>
-                            <h3> Rs {item.price}</h3>
-                          </div>
-                          <div>
-                          <h3>{item.quantity}</h3>
-                            </div>
-                          <div>
-                            <h1>Total: {item.price * item.quantity}</h1>
-                            <button className="bg-blue-500 text-white">order</button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="mt-2 font-bold text-black">
-                  Total Price: ${cart.totalPrice}
-                </div>
-              </div>
-            ))
-          )
+    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      {carts ? (
+        carts.length === 0 ? (
+          <p className="text-gray-500 text-center col-span-full">No carts found.</p>
         ) : (
-          <p className="text-gray-500 mt-2">Loading cart...</p>
-        )}
-      </div>
+          carts.map((cart) => (
+            <div
+              key={cart.id}
+              className="bg-white rounded-xl shadow-md p-5 border border-gray-200 hover:shadow-lg transition"
+            >
+              <h2 className="text-lg font-semibold text-white bg-blue-500 px-3 py-1 inline-block rounded mb-4">
+                Cart #{cart.id}
+              </h2>
+
+              <div className="space-y-3">
+                {!cart.cartItems || cart.cartItems.length === 0 ? (
+                  <p className="text-gray-500">No items in this cart.</p>
+                ) : (
+                  cart.cartItems.map((item: CartItem) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 bg-blue-100 p-3 rounded"
+                    >
+                      <img
+                        className="h-16 w-16 object-cover rounded bg-white border"
+                        src={`https://localhost:7032/${item.imageUrl}` || "/placeholder.png"}
+                        alt={item.productName}
+                      />
+
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-800">{item.productName}</h3>
+                        <p className="text-sm text-gray-600">
+                          Rs {item.price} × {item.quantity}
+                        </p>
+                        <p className="font-semibold text-gray-700">
+                          Total: Rs {(item.price * item.quantity).toFixed(2)}
+                        </p>
+                      </div>
+
+                      <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm">
+                        Order
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className="mt-4 font-bold text-right text-blue-700">
+                Cart Total: Rs {cart.totalPrice.toFixed(2)}
+              </div>
+            </div>
+          ))
+        )
+      ) : (
+        <p className="text-gray-500 text-center col-span-full">Loading cart...</p>
+      )}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default CartPage;

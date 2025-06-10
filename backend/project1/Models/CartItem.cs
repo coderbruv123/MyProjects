@@ -3,7 +3,7 @@ namespace project1.Models
     public class CartItem
     {
         public int Id { get; set; }
-        public int ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         
         
         public int CartId { get; set; }

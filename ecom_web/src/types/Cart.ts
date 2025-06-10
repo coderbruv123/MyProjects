@@ -1,10 +1,10 @@
 export interface CartItem {
   id: number
+  imageUrl : string,
   productId: number;
   quantity: number;
   price: number;
   productName:string;
-  // Add other properties as needed
 }
 
 export interface User {

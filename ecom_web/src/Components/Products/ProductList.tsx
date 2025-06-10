@@ -42,6 +42,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
         if (!selectedProduct || !selectedCart) return;
 
         const newItem: CartItem = {
+            imageUrl : selectedProduct.imagePath,
             productId: selectedProduct.id,
             quantity,
             price: selectedProduct.price,
