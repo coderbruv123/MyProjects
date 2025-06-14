@@ -45,8 +45,8 @@ const Navbar = () => {
                                 <li>
                                     <button
                                         onClick={() => {
-                                            localStorage.removeItem("token");
-                                            sessionStorage.removeItem("token");
+                                            localStorage.removeItem("user");
+                                            sessionStorage.removeItem("user");
                                             window.location.href = "/";
                                         }}
                                     >

@@ -11,3 +11,13 @@ export const getCategories = async (): Promise<Category[]> => {
     }
 }
 
+export const addCategory = async (category:Category): Promise<Category | null> => {
+    try{
+        const response = await axios.post<Category>('/Category',category);
+        return response.data;
+    }
+    catch (error) {
+        console.error('Error adding category:', error);
+        return null;
+    }
+}

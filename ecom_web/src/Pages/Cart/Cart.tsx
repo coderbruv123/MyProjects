@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ShoppingBagIcon, PlusCircle } from "lucide-react";
-import { getCart, addCart } from "../../api/cartApi";
+import { getCart, addCart, deleteCartItem } from "../../api/cartApi";
 import type { Cart, CartItem } from "../../types/Cart";
 
 const CartPage = () => {
@@ -10,6 +10,7 @@ const CartPage = () => {
     try {
       const fetchedCarts = await getCart();
       setCarts(fetchedCarts);
+      console.log(fetchedCarts);
     } catch (error) {
       setCarts(null);
     }
@@ -27,6 +28,14 @@ const CartPage = () => {
       alert(error);
     }
   };
+  const handleRemoveCartItem = async (cartId: number, productId: number) => {
+    try {
+      await deleteCartItem(cartId, productId);
+      fetchCart();
+    } catch (error) {
+      console.error("Error removing cart item:", error);
+    }
+  }
 
  return (
   <div className="min-h-screen p-6 bg-gray-100">
@@ -68,7 +77,7 @@ const CartPage = () => {
                         className="h-16 w-16 object-cover rounded bg-white border"
                         src={`https://localhost:7032/${item.imageUrl}` || "/placeholder.png"}
                         alt={item.productName}
-                      />
+                      />2
 
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-800">{item.productName}</h3>
@@ -79,7 +88,8 @@ const CartPage = () => {
                           Total: Rs {(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
-
+                      <button onClick={()=>{handleRemoveCartItem(cart.id, item.productId )}} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm">
+                        Remove</button>
                       <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm">
                         Order
                       </button>

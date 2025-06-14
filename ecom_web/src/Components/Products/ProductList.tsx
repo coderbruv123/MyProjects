@@ -49,6 +49,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
             productName: selectedProduct.name,
             id: selectedCart
         };
+        console.log(selectedProduct.imagePath);
 
         try {
             await addCartItems(selectedCart,newItem); 
@@ -62,7 +63,6 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
 
     return (
         <div>
-            <h1>Product List</h1>
             {loading ? (
                 <p>Loading...</p>
             ) : (

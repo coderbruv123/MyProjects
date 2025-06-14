@@ -113,7 +113,7 @@ namespace project1.Controllers
                     Quantity = cartItemDto.Quantity,
                     Price = cartItemDto.Price,
                     ProductName = cartItemDto.ProductName,
-                
+
 
                 });
             }
@@ -140,6 +140,37 @@ namespace project1.Controllers
             return Ok(cartDto);
         }
 
-     
+        [HttpDelete("{id}/{productid}")]
+        public async Task<IActionResult> RemoveCartItem(int id, int productId)
+        {
+              var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return BadRequest("User not authenticated");
+            }
+                        var userId = int.Parse(userIdClaim.Value);
+
+            var cart = await _context.Carts.Where(c => c.Id == id)
+                   .Include(c => c.CartItems)
+                   .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                return BadRequest("Cart doesn't exist");
+                   }
+            var cartItem = cart.CartItems.Find(ci => ci.ProductId == productId);
+
+            if (cartItem == null)
+            {
+                return BadRequest("item doesn't exist in cart ");
+            }
+            else
+            {
+                cart.CartItems.Remove(cartItem);
+            }
+                        await _context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

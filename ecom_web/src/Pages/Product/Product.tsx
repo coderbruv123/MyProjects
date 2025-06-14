@@ -18,7 +18,7 @@ const Product = () => {
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8 text-center">Products</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-blue-500">Products</h1>
       <div className="flex justify-center mb-8 gap-4 flex-wrap">
         <button
           className={`px-4 py-2 rounded ${selectedCategory === null ? "bg-blue-600 text-white" : "bg-white text-blue-500 border"}`}
