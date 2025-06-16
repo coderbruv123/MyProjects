@@ -1,6 +1,6 @@
 import { useState } from "react";
 import  axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
 
 const Login = () => {
   const navigate = useNavigate(); 
@@ -78,6 +78,12 @@ return (
           Submit
         </button>
       </form>
+      <div className=" mt-4  block text-center">
+
+      <p className="text-gray-700">Don't have an account?</p>
+      <Link className="hover:underline text-blue-500" to="/Auth/Register" >
+         Register here</Link>
+      </div>
     </div>
   </div>
 );

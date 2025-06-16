@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const user = {
@@ -34,6 +35,8 @@ const Profile = () => {
           <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
             Edit Profile
           </button>
+          <Link to="/Account/Dashboard" className="ml-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+            Admin Panel</Link>
         </div>
       </div>
     </div>

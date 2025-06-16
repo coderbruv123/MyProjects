@@ -52,7 +52,8 @@ namespace project1.Controllers
                     ProductId = ci.ProductId,
                     Quantity = ci.Quantity,
                     Price = ci.Price,
-                    ProductName = ci.ProductName
+                    ProductName = ci.ProductName,
+                    ImageUrl = ci.ImageUrl
                 }).ToList()
             }).ToList();
 

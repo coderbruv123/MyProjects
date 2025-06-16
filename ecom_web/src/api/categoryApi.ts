@@ -1,5 +1,5 @@
 import axios from "./axiosInstancs";
-import type { Category } from "../types/Category";
+import type { Category, CategoryAdd } from "../types/Category";
 
 export const getCategories = async (): Promise<Category[]> => {
     try {
@@ -11,7 +11,7 @@ export const getCategories = async (): Promise<Category[]> => {
     }
 }
 
-export const addCategory = async (category:Category): Promise<Category | null> => {
+export const addCategory = async (category:CategoryAdd): Promise<Category | null> => {
     try{
         const response = await axios.post<Category>('/Category',category);
         return response.data;
