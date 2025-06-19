@@ -54,6 +54,12 @@ namespace project1.Controllers
             {
                 OrderDate = DateTime.Now,
                 TotalAmount = order.TotalAmount,
+                OrderItems = order.OrderItems.Select(oi => new OrderItem
+                {
+                    ProductId = oi.ProductId,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price
+                }).ToList(),
                 Status = order.Status,
                 UserId = int.Parse(userIdClaim.Value)
             };

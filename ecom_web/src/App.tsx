@@ -11,6 +11,7 @@ import Product from './Pages/Product/Product'
 import ProtectedRoute from './AuthCheck/AuthCheck'
 import Aboutinfo from './Pages/About/Aboutinfo'
 import Dashboard from './Pages/Admin/Dashboard'
+import Order from './Pages/Orders/Order'
 
 function MainLayout() {
   return (
@@ -43,6 +44,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Cart />
+                </ProtectedRoute>
+              }
+            />
+             <Route
+              path="orders"
+              element={
+                <ProtectedRoute>
+                  <Order />
                 </ProtectedRoute>
               }
             />

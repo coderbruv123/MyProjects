@@ -30,14 +30,12 @@ const settings = {
 
 const Categories = () => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(true);
+   
   
     useEffect(() => {
       getCategories()
         .then(setCategories)
-        .finally(() => {
-          setLoading(false);
-        });
+        ;
     }, []);
   return (
     <div className="w-full bg-white flex flex-col items-center justify-center py-10">

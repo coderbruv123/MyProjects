@@ -38,7 +38,7 @@ namespace project1.Controllers
         }
 
         [HttpPost]
-        //    [Authorize]
+           [Authorize]
         public  async Task<ActionResult <Product>> CreateProduct ([FromForm]ProductDTO productdto)
         {
             string imagePath = null;

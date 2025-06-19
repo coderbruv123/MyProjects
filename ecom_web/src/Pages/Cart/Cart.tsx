@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ShoppingBagIcon, PlusCircle } from "lucide-react";
 import { getCart, addCart, deleteCartItem } from "../../api/cartApi";
 import type { Cart, CartItem } from "../../types/Cart";
+import { Link } from "react-router-dom";
 
 const CartPage = () => {
   const [carts, setCarts] = useState<Cart[] | null>(null);
@@ -42,7 +43,7 @@ const CartPage = () => {
     <h1 className="text-4xl font-bold text-center flex items-center justify-center gap-2 mb-6 text-blue-800">
       <ShoppingBagIcon size={40} /> My Cart
     </h1>
-
+  <Link to="/Account/orders" className="text-blue-500">order</Link>
     <button
       className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-full mx-auto hover:bg-blue-700 transition shadow"
       onClick={handleAddCart}

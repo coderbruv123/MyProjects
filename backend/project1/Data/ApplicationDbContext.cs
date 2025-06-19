@@ -39,6 +39,11 @@ namespace project1.Data
                 .HasMany(u => u.Carts)
                 .WithOne(c => c.User)
                 .HasForeignKey(c => c.UserId);
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderItems)
+                .WithOne(oi => oi.Order)
+                .HasForeignKey(oi => oi.OrderId);
+      
 
         }
     }
