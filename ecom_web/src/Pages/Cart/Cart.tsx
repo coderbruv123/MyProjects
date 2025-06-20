@@ -3,10 +3,12 @@ import { ShoppingBagIcon, PlusCircle } from "lucide-react";
 import { getCart, addCart, deleteCartItem } from "../../api/cartApi";
 import type { Cart, CartItem } from "../../types/Cart";
 import { Link } from "react-router-dom";
+import type { addOrder, Order } from "../../types/Order";
+import { addOrders } from "../../api/orderApi";
 
 const CartPage = () => {
   const [carts, setCarts] = useState<Cart[] | null>(null);
-
+  
   const fetchCart = async () => {
     try {
       const fetchedCarts = await getCart();
@@ -20,7 +22,28 @@ const CartPage = () => {
   useEffect(() => {
     fetchCart();
   }, []);
+  const handleOrder = (item:CartItem) => {
+    
+    const order: addOrder ={
+      id: 0,
+            totalAmount: item.price * item.quantity,
 
+      orderItems: [{
+        orderId: 0, 
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      }],
+      status: "Pending",
+
+    }
+    const response = addOrders(order);
+    console.log("Order item:", response);
+    
+
+    
+    alert("Order functionality is not implemented yet.");
+  }
   const handleAddCart = async () => {
     try {
       await addCart();
@@ -91,7 +114,7 @@ const CartPage = () => {
                       </div>
                       <button onClick={()=>{handleRemoveCartItem(cart.id, item.productId )}} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm">
                         Remove</button>
-                      <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm">
+                      <button onClick={()=>handleOrder(item)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm">
                         Order
                       </button>
                     </div>

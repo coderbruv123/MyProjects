@@ -29,7 +29,8 @@ namespace project1.Controllers
                 return BadRequest("User not authenticated");
             }
 
-            var orders = await _context.Orders.Where(o => o.UserId == int.Parse(userIdClaim.Value))
+            var orders = await _context.Orders.Where(o => o.UserId == int.Parse(userIdClaim.Value)).Include(o => o.OrderItems)
+               
                 .ToListAsync();
             return Ok(orders);
         }
