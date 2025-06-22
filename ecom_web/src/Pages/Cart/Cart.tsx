@@ -22,7 +22,7 @@ const CartPage = () => {
   useEffect(() => {
     fetchCart();
   }, []);
-  const handleOrder = (item:CartItem) => {
+  const handleOrder = (item:CartItem, cartId: number) => {
     
     const order: addOrder ={
       id: 0,
@@ -31,6 +31,7 @@ const CartPage = () => {
       orderItems: [{
         orderId: 0, 
         productId: item.productId,
+        productName: item.productName,
         quantity: item.quantity,
         price: item.price,
       }],
@@ -40,9 +41,11 @@ const CartPage = () => {
     const response = addOrders(order);
     console.log("Order item:", response);
     
-
+     deleteCartItem(cartId, item.productId);
+    fetchCart();
     
-    alert("Order functionality is not implemented yet.");
+    
+    alert("Order placed successfully!");
   }
   const handleAddCart = async () => {
     try {
@@ -114,7 +117,7 @@ const CartPage = () => {
                       </div>
                       <button onClick={()=>{handleRemoveCartItem(cart.id, item.productId )}} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm">
                         Remove</button>
-                      <button onClick={()=>handleOrder(item)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm">
+                      <button onClick={()=>handleOrder(item,cart.id )} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm">
                         Order
                       </button>
                     </div>

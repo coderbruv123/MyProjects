@@ -23,52 +23,86 @@ namespace project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-                        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
             {
                 return BadRequest("User not authenticated");
             }
 
             var orders = await _context.Orders.Where(o => o.UserId == int.Parse(userIdClaim.Value)).Include(o => o.OrderItems)
-               
+
                 .ToListAsync();
-            return Ok(orders);
+
+            var response = orders.Select(o => new Order
+            {
+                Id = o.Id,
+                OrderDate = o.OrderDate,
+                TotalAmount = o.TotalAmount,
+                Status = o.Status,
+                OrderItems = o.OrderItems.Select(oi => new OrderItem
+                {
+                    Id = oi.Id,
+                    ProductId = oi.ProductId,
+                    ProductName = oi.ProductName,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price
+                }).ToList()
+            }).ToList();
+
+            return Ok(response);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Order>> CreateOrder(OrderDTO order)
+    public async Task<ActionResult<Order>> CreateOrder(OrderDTO order)
+{
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+    if (userIdClaim == null)
+    {
+        return BadRequest("User not authenticated");
+    }
+
+    if (order == null || order.OrderItems == null || !order.OrderItems.Any())
+    {
+        return BadRequest("Order or Order items cannot be empty.");
+    }
+
+    var orderEntity = new Order
+    {
+        OrderDate = DateTime.UtcNow,
+        TotalAmount = order.TotalAmount,
+        Status = order.Status,
+        UserId = int.Parse(userIdClaim.Value),
+        OrderItems = order.OrderItems.Select(oi => new OrderItem
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            ProductId = oi.ProductId,
+            ProductName = oi.ProductName,
+            Quantity = oi.Quantity,
+            Price = oi.Price
+        }).ToList()
+    };
 
-            if (userIdClaim == null)
-            {
-                return BadRequest("User not authenticated");
-            }
+    _context.Orders.Add(orderEntity);
+    await _context.SaveChangesAsync();
 
-            if (order == null)
-            {
-                return BadRequest("Order cannot be null");
-            }
+    var orderResponse = new Order
+    {
+        Id = orderEntity.Id,
+        OrderDate = orderEntity.OrderDate,
+        TotalAmount = orderEntity.TotalAmount,
+        Status = orderEntity.Status,
+        OrderItems = orderEntity.OrderItems.Select(oi => new OrderItem
+        {
+            Id = oi.Id,
+            ProductId = oi.ProductId,
+            ProductName = oi.ProductName,
+            Quantity = oi.Quantity,
+            Price = oi.Price
+        }).ToList()
+    };
 
-            var order1 = new Order
-            {
-                OrderDate = DateTime.Now,
-                TotalAmount = order.TotalAmount,
-                OrderItems = order.OrderItems.Select(oi => new OrderItem
-                {
-                    ProductId = oi.ProductId,
-                    Quantity = oi.Quantity,
-                    Price = oi.Price
-                }).ToList(),
-                Status = order.Status,
-                UserId = int.Parse(userIdClaim.Value)
-            };
+    return Ok(orderResponse);
+}
 
-            await _context.Orders.AddAsync(order1);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetOrders), new { id = order1.Id }, order1);
-        }
     }
 }

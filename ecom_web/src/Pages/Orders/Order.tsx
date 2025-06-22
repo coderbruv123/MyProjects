@@ -1,35 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getOrders } from '../../api/orderApi';
+import type { Order } from '../../types/Order';
 
 const Order = () => {
-  const orders = [
-    {
-      id: 1,
-      products: [
-        { id: 1, name: 'Product 1', price: 'Rs 10', quantity: 2 },
-        { id: 2, name: 'Product 2', price: 'Rs 10', quantity: 1 }
-      ],
-      totalPrice: 'Rs 20',
-      status: 'Pending'
-    },
-    {
-      id: 2,
-      products: [
-        { id: 1, name: 'Product 1', price: 'Rs 10', quantity: 2 },
-        { id: 2, name: 'Product 2', price: 'Rs 10', quantity: 1 }
-      ],
-      totalPrice: 'Rs 30',
-      status: 'Shipped'
-    },
-    {
-      id: 3,
-      products: [
-        { id: 1, name: 'Product 1', price: 'Rs 10', quantity: 2 },
-        { id: 2, name: 'Product 2', price: 'Rs 10', quantity: 1 }
-      ],
-      totalPrice: 'Rs 10',
-      status: 'Delivered'
-    }
-  ];
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getOrders()
+      .then((data) => {
+        console.log(data);
+        setOrders(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching orders:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="p-6 text-center">Loading orders...</div>;
+  }
 
   return (
     <div className="p-6">
@@ -39,7 +32,7 @@ const Order = () => {
         <thead>
           <tr>
             <th className="border px-4 py-2 text-left">Order ID</th>
-            <th className="border px-4 py-2 text-left">Products</th>
+            <th className="border px-4 py-2 text-left">Items</th>
             <th className="border px-4 py-2 text-left">Total Price</th>
             <th className="border px-4 py-2 text-left">Status</th>
           </tr>
@@ -50,14 +43,14 @@ const Order = () => {
               <td className="border px-4 py-2">{order.id}</td>
               <td className="border px-4 py-2">
                 <ul className="list-disc pl-5">
-                  {order.products.map((product) => (
-                    <li key={product.id}>
-                      {product.name} (x{product.quantity})
+                  {order.orderItems.map((item) => (
+                    <li>
+                      {item.productName} (x{item.quantity})
                     </li>
                   ))}
                 </ul>
               </td>
-              <td className="border px-4 py-2">{order.totalPrice}</td>
+              <td className="border px-4 py-2">Rs {order.totalAmount}</td>
               <td className="border px-4 py-2">{order.status}</td>
             </tr>
           ))}
