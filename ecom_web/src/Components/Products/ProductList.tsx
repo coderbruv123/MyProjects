@@ -79,7 +79,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                                 </div>
                                 <div className="flex flex-col justify-center items-center gap-2 p-4">
                                     <p className="text-xl font-semibold text-blue-800">{product.name}</p>
-                                    <p className="text-lg text-indigo-700 font-bold">${product.price}</p>
+                                    <p className="text-lg text-indigo-700 font-bold">Rs {product.price}</p>
                                     <button
                                         className="bg-indigo-500 text-white text-lg px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-indigo-600 transition"
                                         onClick={() => handleAddToCartClick(product)}

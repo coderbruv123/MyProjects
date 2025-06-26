@@ -9,7 +9,7 @@ export interface Order {
 export interface OrderItem{
     orderId: number;
     productId: number;
-    prodectName: string;
+    productName: string;
     quantity: number;
     price: number;
 }

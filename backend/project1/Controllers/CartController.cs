@@ -69,6 +69,13 @@ namespace project1.Controllers
             {
                 return BadRequest("User not authenticated");
             }
+            var carts = await _context.Carts
+                .Where(c => c.UserId == int.Parse(userIdClaim.Value))
+                .ToListAsync();
+            if(carts.Count > 5)
+            {
+                return BadRequest("Cart  limit exceeded. You can only have 5 carts.");
+            }
             var cart = new Cart
             {
                 UserId = int.Parse(userIdClaim.Value),
@@ -141,15 +148,40 @@ namespace project1.Controllers
             return Ok(cartDto);
         }
 
-        [HttpDelete("{id}/{productid}")]
-        public async Task<IActionResult> RemoveCartItem(int id, int productId)
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> ClearCart(int id)
         {
-              var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
             {
                 return BadRequest("User not authenticated");
             }
-                        var userId = int.Parse(userIdClaim.Value);
+            var userId = int.Parse(userIdClaim.Value);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
+            if (cart == null)
+            {
+                return NotFound("Cart not found");
+            }
+            cart.CartItems.Clear();
+            cart.TotalPrice = 0;
+            await _context.SaveChangesAsync();
+            return Ok("Cart cleared successfully");
+        }
+
+        [HttpDelete("{id}/{productid}")]
+        
+        [Authorize]
+        public async Task<IActionResult> RemoveCartItem(int id, int productId)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return BadRequest("User not authenticated");
+            }
+            var userId = int.Parse(userIdClaim.Value);
 
             var cart = await _context.Carts.Where(c => c.Id == id)
                    .Include(c => c.CartItems)
@@ -158,7 +190,7 @@ namespace project1.Controllers
             if (cart == null)
             {
                 return BadRequest("Cart doesn't exist");
-                   }
+            }
             var cartItem = cart.CartItems.Find(ci => ci.ProductId == productId);
 
             if (cartItem == null)
@@ -167,9 +199,11 @@ namespace project1.Controllers
             }
             else
             {
+                                cart.TotalPrice -= cartItem.Price * cartItem.Quantity;
+
                 cart.CartItems.Remove(cartItem);
             }
-                        await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok();
         }

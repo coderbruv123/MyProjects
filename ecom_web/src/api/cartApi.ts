@@ -47,3 +47,11 @@ export const deleteCartItem = async (
     console.error("Error deleting cart item:", error);
   }
 }
+export const clearCart = async (cartId: number): Promise<void> => {
+  try {
+    await axios.delete(`/Cart/${cartId}`);
+    console.log(`Cart with ID ${cartId} cleared`);
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+  }
+}
