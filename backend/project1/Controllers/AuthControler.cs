@@ -16,12 +16,8 @@ namespace project1.Controllers{
         [HttpPost("register")]
         public IActionResult Register(UserDTO userDto )
         {
-       
-
-
-        
-            
-            if(userDto == null || string.IsNullOrEmpty(userDto.Name) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Password))
+                
+        if(userDto == null || string.IsNullOrEmpty(userDto.Name) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Password))
             {
                 return BadRequest(new { message = "All fields are required" });
             }
@@ -32,6 +28,27 @@ namespace project1.Controllers{
             }
             return Ok(user);
         }
+
+        [Authorize(Roles = "Admin")]      
+        [HttpPost("register-admin")]
+        public IActionResult Register(AdminDTO userDto )
+        {
+          
+                
+        if (userDto == null || string.IsNullOrEmpty(userDto.Name) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Password))
+            {
+                return BadRequest(new { message = "All fields are required" });
+            }
+          
+          var user = authService.RegisterAdmin(userDto).Result;
+            if(user != "User registered successfully")
+            {
+                return BadRequest(user);
+            }
+            
+            return Ok(user);
+        }
+
 
         [HttpPost("login")]
     

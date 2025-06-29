@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getOrders } from '../../api/orderApi';
 import type { Order } from '../../types/Order';
 
-const Order = () => {
+const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,4 +60,4 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default Orders;

@@ -10,12 +10,13 @@ interface DecodedToken {
 function isTokenExpired(token: string): boolean {
   try {
     const decoded: DecodedToken = jwtDecode(token);
+    console.log("Decoded Token:", decoded);
     const currentTime = Date.now() / 1000; 
     return decoded.exp < currentTime;
   } catch (e) {
     return true; 
   }
-}
+}  
 
 export function ProtectedRoute({ children }: { children: JSX.Element }) {
   const token = localStorage.getItem("user") || sessionStorage.getItem("token");
@@ -23,6 +24,8 @@ export function ProtectedRoute({ children }: { children: JSX.Element }) {
 
   if (!token || isTokenExpired(token)) {
     localStorage.removeItem("user");
+    localStorage.removeItem("info");
+
     return <Navigate to="/Auth/login" state={{ from: location }} replace />;
   }
 

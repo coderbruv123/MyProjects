@@ -1,6 +1,7 @@
 import { useState } from "react";
-import  axios from "axios";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom"; 
+import {jwtDecode} from "jwt-decode"; // FIXED: import default
 
 const Login = () => {
   const navigate = useNavigate(); 
@@ -25,22 +26,38 @@ const Login = () => {
       const res = await axios.post(
         "https://localhost:7032/api/Auth/login",
         {
-          name: "",
+          name: "", 
           email: credentials.email,
           password: credentials.password,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
         }
       );
-      
-      console.log(res.data);
-            localStorage.setItem("user", res.data);
-                  navigate("/"); 
 
+      const token = res.data;
+      localStorage.setItem("user", token); 
+
+      type DecodedToken = {
+        [key: string]: string;
+      };
+      const decoded = jwtDecode<DecodedToken>(token);
+
+      const info = {
+        id: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
+        name: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
+        email: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],
+        role: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+      };
+
+      localStorage.setItem("info", JSON.stringify(info));
+
+      console.log(info);
+
+      navigate("/");
 
     } catch (error) {
       console.error(error);
@@ -51,6 +68,7 @@ const Login = () => {
       }
     }
   };
+
 
 return (
   <div className="flex items-center justify-center  ">

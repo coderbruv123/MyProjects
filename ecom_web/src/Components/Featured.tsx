@@ -53,7 +53,7 @@ const Featured = () => {
                 <div className="bg-white h-[420px] w-full rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
                   <div className="h-56 w-full rounded-t-xl bg-indigo-100 flex justify-center items-center">
                     <img
-                      src=""
+                      src={product.imagePath}
                       alt={product.name}
                       className="h-44 w-44 object-contain"
                     />
