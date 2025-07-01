@@ -26,7 +26,7 @@ namespace project1.Controllers{
             {
                 return BadRequest(user);
             }
-            return Ok(user);
+            return Ok(user);  
         }
 
         [Authorize(Roles = "Admin")]      
@@ -58,10 +58,7 @@ namespace project1.Controllers{
             {
                 return BadRequest(new { message = "Email and password are required" });
             }
-            
-           
-
-            
+                       
             var user = authService.Login(userDto).Result;
             if(user == null){
                 return Unauthorized(new { message = "Invalid email or password" });

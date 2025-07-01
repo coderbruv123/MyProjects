@@ -5,7 +5,8 @@ namespace project1.DTO{
         public List<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
         public string Status { get; set; } = null!;
 
-
+        public string Location { get; set; } = null!; 
+        public string PhoneNumber { get; set; } = null!;
         
     }
 }

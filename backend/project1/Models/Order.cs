@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 
-namespace project1.Models{
+namespace project1.Models
+{
     public class Order
     {
         public int Id { get; set; }
@@ -11,8 +12,9 @@ namespace project1.Models{
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = null!;
 
+        public string Location { get; set; } = null!; 
+        public string PhoneNumber { get; set; } = null!;
 
-        
         [JsonIgnore]
         public User User { get; set; } = null!;
     }

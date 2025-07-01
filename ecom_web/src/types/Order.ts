@@ -4,6 +4,8 @@ export interface Order {
     orderItems: OrderItem[];
     orderDate: string;
     totalAmount: number;
+    phoneNumber: string;
+    location: string;
     status: string; 
 }
 export interface OrderItem{
@@ -16,7 +18,8 @@ export interface OrderItem{
 export interface addOrder{
     id:number;
     totalAmount: number;
-
+    phoneNumber: string;
+    location: string;
     orderItems: OrderItem[];
     status: string;
 }

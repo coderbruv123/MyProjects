@@ -5,9 +5,17 @@ import type { Cart, CartItem } from "../../types/Cart";
 import { Link } from "react-router-dom";
 import type { addOrder } from "../../types/Order";
 import { addOrders } from "../../api/orderApi";
+import ProtectedRoute from "../../AuthCheck/AuthCheck";
+
+// Define a new type extending CartItem with cartId
+type SelectedCartItem = CartItem & { cartId: number };
 
 const CartPage = () => {
   const [carts, setCarts] = useState<Cart[] | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCartItem, setSelectedCartItem] = useState<SelectedCartItem | null>(null);
+  const [phone, setPhone] = useState("");
+  const [location, setLocation] = useState("");
 
   const fetchCart = async () => {
     try {
@@ -23,7 +31,17 @@ const CartPage = () => {
     fetchCart();
   }, []);
 
-  const handleOrder = async (item: CartItem, cartId: number) => {
+  const handleAddToOrderClick = (cartItem: CartItem, cartId: number) => {
+    setSelectedCartItem({ ...cartItem, cartId }); // store cartId properly
+    setShowModal(true);
+  };
+
+  const handleOrder = async (item: SelectedCartItem, phone: string, location: string) => {
+    if (!phone || !location) {
+      alert("Please enter phone number and location.");
+      return;
+    }
+
     try {
       const order: addOrder = {
         id: 0,
@@ -38,15 +56,20 @@ const CartPage = () => {
           },
         ],
         status: "Pending",
+        phoneNumber: phone,
+        location: location,
       };
-
+      console.log(order)
       const response = await addOrders(order);
       console.log("Order response:", response);
 
-      await deleteCartItem(cartId, item.productId);
+      await deleteCartItem(item.cartId, item.productId);
       await fetchCart();
 
       alert("Order placed successfully!");
+      setShowModal(false);
+      setPhone("");
+      setLocation("");
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order.");
@@ -158,7 +181,7 @@ const CartPage = () => {
                             Remove
                           </button>
                           <button
-                            onClick={() => handleOrder(item, cart.id)}
+                            onClick={() => handleAddToOrderClick(item, cart.id)}
                             className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm"
                           >
                             Order
@@ -177,6 +200,82 @@ const CartPage = () => {
           )
         ) : (
           <p className="text-gray-500 text-center col-span-full">Loading cart...</p>
+        )}
+
+        {showModal && selectedCartItem && (
+          <ProtectedRoute>
+            <div
+              className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 text-black"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setShowModal(false);
+              }}
+            >
+              <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
+                <h2 className="text-xl font-bold mb-4">Place Order</h2>
+
+                <div className="mb-4">
+                  <label className="block mb-1 font-medium">Fill the Details</label>
+                </div>
+
+                <div>
+                  <label>{selectedCartItem.productName}</label>
+                </div>
+                <div>
+                  <label>
+                    Rs {selectedCartItem.price} x {selectedCartItem.quantity} per unit = Rs{" "}
+                    {selectedCartItem.quantity * selectedCartItem.price}
+                  </label>
+                </div>
+
+                <form
+                  className="space-y-4 mt-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleOrder(selectedCartItem, phone, location);
+                  }}
+                >
+                  <div>
+                    <label className="block mb-1 font-medium">Location</label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border rounded"
+                      placeholder="Enter delivery address"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-medium">Phone Number</label>
+                    <input
+                      type="tel"
+                      className="w-full px-3 py-2 border rounded"
+                      placeholder="Enter your phone number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-3">
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+                    >
+                      Place Order
+                    </button>
+                    <button
+                      type="button"
+                      className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </ProtectedRoute>
         )}
       </div>
     </div>

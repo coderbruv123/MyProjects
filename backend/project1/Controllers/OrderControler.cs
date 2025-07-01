@@ -39,6 +39,8 @@ namespace project1.Controllers
                 OrderDate = o.OrderDate,
                 TotalAmount = o.TotalAmount,
                 Status = o.Status,
+                PhoneNumber = o.PhoneNumber,
+                Location = o.Location,
                 OrderItems = o.OrderItems.Select(oi => new OrderItem
                 {
                     Id = oi.Id,
@@ -73,6 +75,8 @@ namespace project1.Controllers
         TotalAmount = order.TotalAmount,
         Status = order.Status,
         UserId = int.Parse(userIdClaim.Value),
+        PhoneNumber = order.PhoneNumber,
+        Location = order.Location,
         OrderItems = order.OrderItems.Select(oi => new OrderItem
         {
             ProductId = oi.ProductId,
@@ -91,6 +95,8 @@ namespace project1.Controllers
         OrderDate = orderEntity.OrderDate,
         TotalAmount = orderEntity.TotalAmount,
         Status = orderEntity.Status,
+        PhoneNumber = orderEntity.PhoneNumber,
+        Location = orderEntity.Location,
         OrderItems = orderEntity.OrderItems.Select(oi => new OrderItem
         {
             Id = oi.Id,

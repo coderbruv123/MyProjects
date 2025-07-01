@@ -35,6 +35,8 @@ const Orders = () => {
             <th className="border px-4 py-2 text-left">Items</th>
             <th className="border px-4 py-2 text-left">Total Price</th>
             <th className="border px-4 py-2 text-left">Status</th>
+            <th className="border px-4 py-2 text-left">Location</th>
+            <th className="border px-4 py-2 text-left">Phone Number</th>
           </tr>
         </thead>
         <tbody>
@@ -52,6 +54,8 @@ const Orders = () => {
               </td>
               <td className="border px-4 py-2">Rs {order.totalAmount}</td>
               <td className="border px-4 py-2">{order.status}</td>
+              <td className="border px-4 py-2">{order.location}</td>
+              <td className="border px-4 py-2">{order.phoneNumber}</td>
             </tr>
           ))}
         </tbody>
