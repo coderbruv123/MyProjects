@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getOrders } from '../../api/orderApi';
 import type { Order } from '../../types/Order';
+import type { EsewaPaymentProps } from '../../types/EsewaProps';
+import esewaPay from '../../Components/payment/esewaPay';
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -53,7 +55,21 @@ const Orders = () => {
                 </ul>
               </td>
               <td className="border px-4 py-2">Rs {order.totalAmount}</td>
-              <td className="border px-4 py-2">{order.status}</td>
+              <td className="border px-4 py-2">
+                {order.status}
+                {order.status === 'Pending' && (
+                  <button
+                    onClick={() =>
+                      esewaPay({                        amount: order.totalAmount,
+                        productId: order.id.toString(),
+                      } as EsewaPaymentProps)
+                    }
+                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+                  >
+                    pay
+                  </button>
+                )}
+              </td>
               <td className="border px-4 py-2">{order.location}</td>
               <td className="border px-4 py-2">{order.phoneNumber}</td>
             </tr>

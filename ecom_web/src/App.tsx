@@ -79,7 +79,10 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
+              <Route path='/success' element={<h2>Payment Success Demo</h2>} />
+              <Route path='/failure' element={<h2>Payment Failed DemoS</h2>} />
         <Route path="*" element={<div>404</div>} />
+      
       </Routes>
     </BrowserRouter>
   );

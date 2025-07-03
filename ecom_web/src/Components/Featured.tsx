@@ -55,7 +55,7 @@ const Featured = () => {
                     <img
                       src={product.imagePath}
                       alt={product.name}
-                      className="h-44 w-44 object-contain"
+                      className="h-44 w-44 "
                     />
                   </div>
                   <div className="flex flex-col justify-center items-center gap-2 p-4">
