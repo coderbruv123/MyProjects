@@ -38,6 +38,7 @@ namespace project1.Controllers
                 Id = o.Id,
                 OrderDate = o.OrderDate,
                 TotalAmount = o.TotalAmount,
+                TransactionUuid = o.TransactionUuid,
                 Status = o.Status,
                 PhoneNumber = o.PhoneNumber,
                 Location = o.Location,
@@ -72,6 +73,7 @@ namespace project1.Controllers
     var orderEntity = new Order
     {
         OrderDate = DateTime.UtcNow,
+        TransactionUuid = Guid.NewGuid().ToString(), 
         TotalAmount = order.TotalAmount,
         Status = order.Status,
         UserId = int.Parse(userIdClaim.Value),

@@ -13,6 +13,8 @@ import Aboutinfo from './Pages/About/Aboutinfo'
 import Dashboard from './Pages/Admin/Dashboard'
 import Orders from './Pages/Orders/Order'
 import AdminRoute from './AuthCheck/AdminCheck'
+import Success from './Pages/payments/Success'
+import Failure from './Pages/payments/Failure'
 function MainLayout() {
   return (
     <>
@@ -79,8 +81,12 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
-              <Route path='/success' element={<h2>Payment Success Demo</h2>} />
-              <Route path='/failure' element={<h2>Payment Failed DemoS</h2>} />
+
+         <Route path='/payment'>
+  <Route path='success' element={<Success/>} />
+  <Route path='failure' element={<Failure/>} />
+</Route>
+
         <Route path="*" element={<div>404</div>} />
       
       </Routes>

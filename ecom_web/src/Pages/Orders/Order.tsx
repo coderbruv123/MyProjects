@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getOrders } from '../../api/orderApi';
 import type { Order } from '../../types/Order';
-import type { EsewaPaymentProps } from '../../types/EsewaProps';
-import esewaPay from '../../Components/payment/esewaPay';
+import EsewaPay from '../../Components/payment/esewaPay'; // Corrected to PascalCase import for component
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [payingOrderId, setPayingOrderId] = useState<number | null>(null);
 
   useEffect(() => {
     getOrders()
@@ -48,7 +48,7 @@ const Orders = () => {
               <td className="border px-4 py-2">
                 <ul className="list-disc pl-5">
                   {order.orderItems.map((item) => (
-                    <li>
+                    <li key={item.productId}>
                       {item.productName} (x{item.quantity})
                     </li>
                   ))}
@@ -58,16 +58,22 @@ const Orders = () => {
               <td className="border px-4 py-2">
                 {order.status}
                 {order.status === 'Pending' && (
-                  <button
-                    onClick={() =>
-                      esewaPay({                        amount: order.totalAmount,
-                        productId: order.id.toString(),
-                      } as EsewaPaymentProps)
-                    }
-                    className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
-                  >
-                    pay
-                  </button>
+                  <>
+                    <button
+                      onClick={() => setPayingOrderId(order.id)}
+                      className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+                    >
+                      Pay
+                    </button>
+                    {payingOrderId === order.id && (
+                      <EsewaPay
+                        amount={order.totalAmount}
+                        transactionuuid={order.transactionUuid.toString()}
+                        successUrl="http://localhost:5173/Payment/success"
+                        failureUrl="http://localhost:5173/Payment/failure"
+                      />
+                    )}
+                  </>
                 )}
               </td>
               <td className="border px-4 py-2">{order.location}</td>

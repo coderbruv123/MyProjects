@@ -6,6 +6,7 @@ namespace project1.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public string TransactionUuid { get; set; } = null!; 
 
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public DateTime OrderDate { get; set; }

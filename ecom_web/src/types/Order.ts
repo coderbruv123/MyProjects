@@ -1,6 +1,7 @@
 export interface Order {
     id: number;
     userId: number;
+    transactionUuid: string;
     orderItems: OrderItem[];
     orderDate: string;
     totalAmount: number;
