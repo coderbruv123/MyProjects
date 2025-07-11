@@ -1,44 +1,38 @@
 import React, { useEffect, useState } from "react";
-// import { v4 as uuidv4 } from "uuid";  // import uuidv4
 import { getEsewaSign } from "../../api/paymentApi";
+import type { EsewaPaymentProps } from "../../types/EsewaProps";
+import { createtransactionuuid } from "../../api/orderApi";
 
-interface EsewaPayProps {
-  amount: number;
-  successUrl: string;
-  failureUrl: string;
-  transactionuuid: string
-}
-
-const EsewaPay: React.FC<EsewaPayProps> = ({ amount,transactionuuid, successUrl, failureUrl }) => {
+const EsewaPay: React.FC<EsewaPaymentProps> = ({ amount, orderId, successUrl, failureUrl }) => {
   const [signature, setSignature] = useState("");
-  const [transactionUuid,setuuid] = useState("");
+  const [transactionUuid, setUuid] = useState("");
 
   const tax_amount = 0;
   const total_amount = amount + tax_amount;
-  const product_code = "EPAYTEST";  
+  const product_code = "EPAYTEST";
   const product_service_charge = 0;
   const product_delivery_charge = 0;
   const signed_field_names = "total_amount,transaction_uuid,product_code";
-  // const successurl = "http://localhost:5173/Payment/success";
-  // const failure_url = "http://localhost:5173/Payment/failure  ";
 
   useEffect(() => {
-
-    setuuid(transactionuuid);
-    const fetchSignature = async () => {
+    const generateTransactionAndSignature = async () => {
       try {
-        const res = await getEsewaSign(total_amount, transactionUuid, product_code);
+        const transactionuuid = await createtransactionuuid(orderId);
+        console.log("Transaction UUID:", transactionuuid);
+        setUuid(transactionuuid);
+
+        const res = await getEsewaSign(total_amount, transactionuuid, product_code);
         if (!res) {
           throw new Error("Failed to fetch eSewa signature");
         }
         setSignature(res);
       } catch (error) {
-        console.error("Error fetching eSewa signature:", error);
+        console.error("Error during payment preparation:", error);
       }
     };
 
-    fetchSignature();
-  }, [total_amount, transactionUuid]);
+    generateTransactionAndSignature();
+  }, [orderId, total_amount, product_code]);
 
   if (!signature) {
     return <div>Generating payment signature...</div>;
@@ -72,7 +66,9 @@ const EsewaPay: React.FC<EsewaPayProps> = ({ amount,transactionuuid, successUrl,
         <input type="hidden" name="signed_field_names" value={signed_field_names} />
         <input type="hidden" name="signature" value={signature} />
 
-        <button className=" bg-green-600 my-3 p-1" type="submit">Pay with eSewa</button>
+        <button className="bg-green-600 my-3 p-1" type="submit">
+          Pay with eSewa
+        </button>
       </form>
     </div>
   );

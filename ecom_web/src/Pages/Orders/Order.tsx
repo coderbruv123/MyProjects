@@ -68,7 +68,7 @@ const Orders = () => {
                     {payingOrderId === order.id && (
                       <EsewaPay
                         amount={order.totalAmount}
-                        transactionuuid={order.transactionUuid.toString()}
+                        orderId={order.id}
                         successUrl="http://localhost:5173/Payment/success"
                         failureUrl="http://localhost:5173/Payment/failure"
                       />
