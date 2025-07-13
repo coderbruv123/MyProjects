@@ -1,3 +1,4 @@
+import type { PaymentStatus } from "../types/PaymentStatus";
 import axios from "./axiosInstancs";
 
 interface EsewaSignatureResponse {
@@ -23,3 +24,19 @@ export const getEsewaSign = async (
     throw error;
   }
 };
+
+
+
+export const verifyEsewaPay = async (
+  paymentStatus: PaymentStatus
+): Promise<PaymentStatus> => {
+  try {
+    const response = await axios.post<PaymentStatus>(
+      '/Payment/verifyEsewaPayment',
+      paymentStatus
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
