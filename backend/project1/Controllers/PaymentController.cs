@@ -7,17 +7,21 @@ using Microsoft.Extensions.Configuration;
 using DTO;
 using Microsoft.EntityFrameworkCore;
 using project1.Data;
+using YourProject.Models;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 [Route("api/[controller]")]
 [ApiController]
 public class PaymentController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+            private readonly IHttpClientFactory _httpClientFactory;
     private readonly ApplicationDbContext _context;
-    public PaymentController(IConfiguration configuration, ApplicationDbContext context)
+    public PaymentController(IConfiguration configuration, ApplicationDbContext context,IHttpClientFactory httpClientFactory)
     {
-       _context = context;
-    
+        _context = context;
+        _httpClientFactory = httpClientFactory;
         _configuration = configuration;
     }
 
@@ -76,14 +80,14 @@ public class PaymentController : ControllerBase
         {
             return BadRequest(new { error = "Status is required." });
         }
-        var order = _context.Orders.FirstOrDefault(o => o.TransactionUuid == orderstatus.TransactionUuid );
+        var order = _context.Orders.FirstOrDefault(o => o.TransactionUuid == orderstatus.TransactionUuid);
         if (order == null)
         {
             return NotFound(new { error = "Order not found." });
         }
         order.Status = orderstatus.Status;
         _context.SaveChanges();
-        
+
         return Ok(new
         {
             TransactionUuid = orderstatus.TransactionUuid,
@@ -92,6 +96,57 @@ public class PaymentController : ControllerBase
             TotalAmount = orderstatus.TotalAmount,
             ProductCode = orderstatus.ProductCode
         });
-        
+
     }
+    
+ 
+        [HttpPost("initiateKhaltiPayment")]
+        public async Task<IActionResult> InitiateKhaltiPayment([FromBody] KhaltiInitiateRequest request)
+        {
+            var khaltiSecretKey = _configuration["Khalti:SecretKey"];
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Key", khaltiSecretKey);
+
+            var payload = new
+            {
+                return_url = "http://localhost:5173/khalti/success",
+                website_url = "http://localhost:5173",
+                amount = (int)(request.Amount * 100), // convert Rs to paisa
+                purchase_order_id = request.OrderId,
+                purchase_order_name = request.OrderName
+            };
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("https://khalti.com/api/v2/epayment/initiate/", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, $"Error initiating Khalti payment: {error}");
+            }
+
+            var responseData = await response.Content.ReadFromJsonAsync<KhaltiInitiateResponse>();
+            return Ok(responseData);
+        }
+
+        [HttpPost("verifyKhaltiPayment")]
+        public async Task<IActionResult> VerifyKhaltiPayment([FromBody] KhaltiVerifyRequest request)
+        {
+            var khaltiSecretKey = _configuration["Khalti:SecretKey"];
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Key", khaltiSecretKey);
+
+            var content = new StringContent(JsonSerializer.Serialize(new { pidx = request.pidx }), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("https://khalti.com/api/v2/payment/verify/", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, $"Error verifying Khalti payment: {error}");
+            }
+
+            var responseData = await response.Content.ReadFromJsonAsync<KhaltiVerifyResponse>();
+
+
+            return Ok(responseData);
+        }
 }

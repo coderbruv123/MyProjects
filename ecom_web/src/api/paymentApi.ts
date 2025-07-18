@@ -40,3 +40,17 @@ export const verifyEsewaPay = async (
     throw error;
   }
 }
+
+export const initiateKhaltiPay = async (amount: number, orderId: string, orderName: string) => {
+  const response = await axios.post('/Payment/initiateKhaltiPayment', {
+    amount,
+    orderId,
+    orderName
+  });
+  return response.data; // returns { pidx, payment_url }
+};
+
+export const verifyKhaltiPay = async (pidx: string) => {
+  const response = await axios.post('/Payment/verifyKhaltiPayment', { pidx });
+  return response.data;
+};

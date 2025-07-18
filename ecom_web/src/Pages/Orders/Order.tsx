@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getOrders } from '../../api/orderApi';
 import type { Order } from '../../types/Order';
 import EsewaPay from '../../Components/payment/esewaPay'; // Corrected to PascalCase import for component
+import KhaltiPay from '../../Components/payment/khaltiPay';
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -66,12 +67,15 @@ const Orders = () => {
                       Pay
                     </button>
                     {payingOrderId === order.id && (
+                      <div className='flex'>
                       <EsewaPay
                         amount={order.totalAmount}
                         orderId={order.id}
                         successUrl="http://localhost:5173/Payment/success"
                         failureUrl="http://localhost:5173/Payment/failure"
-                      />
+                        />
+                      {/* <KhaltiPay/> */}
+                        </div>
                     )}
                   </>
                 )}

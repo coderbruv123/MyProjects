@@ -103,6 +103,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                         <img src= {`https://localhost:7032/${selectedProduct.imagePath}`} className='w-20 h-26'></img>
                         <p className="mb-2">Product Id: <span className="font-semibold">{selectedProduct.id}</span></p>
                         <p className="mb-2">Product: <span className="font-semibold">{selectedProduct.name}</span></p>
+                        <p className="mb-2">Quantity: <span className="font-semibold">{selectedProduct.quantity}</span></p>
                         <div className="mb-4">
                             <label className="block mb-1 font-medium">Select Cart:</label>
                             <select
@@ -122,6 +123,7 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                             <input
                                 type="number"
                                 min={1}
+                                max={selectedProduct.quantity}
                                 className="w-full border rounded px-2 py-1"
                                 value={quantity}
                                 onChange={e => setQuantity(Math.max(1, Number(e.target.value)))}
