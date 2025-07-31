@@ -98,12 +98,21 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                     <ProtectedRoute>
 
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 text-black">
-                    <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
+                    <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
                         <h2 className="text-xl font-bold mb-4">Add to Cart</h2>
-                        <img src= {`https://localhost:7032/${selectedProduct.imagePath}`} className='w-20 h-26'></img>
+                        <div className='flex  items-center mb-4'>
+
+                        <img src= {`https://localhost:7032/${selectedProduct.imagePath}`} className='w-30 h-40 px-2 object-fit'></img>
+                        <div>
+                            
                         <p className="mb-2">Product Id: <span className="font-semibold">{selectedProduct.id}</span></p>
                         <p className="mb-2">Product: <span className="font-semibold">{selectedProduct.name}</span></p>
                         <p className="mb-2">Quantity: <span className="font-semibold">{selectedProduct.quantity}</span></p>
+                           <div className="mb-4">
+                            <label className="block mb-1 font-medium">Rs {selectedProduct.price}</label>
+                        </div>
+                        </div>
+                        </div>
                         <div className="mb-4">
                             <label className="block mb-1 font-medium">Select Cart:</label>
                             <select
@@ -120,18 +129,21 @@ const ProductList: React.FC<ProductListProps> = ({ selectedCategory }) => {
                         </div>
                         <div className="mb-4">
                             <label className="block mb-1 font-medium">Quantity:</label>
-                            <input
+                            <div className='flex items-center gap-2'>                                <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className='px-2 py-1 bg-gray-200 rounded hover:bg-gray-30'>-</button>
+
+                            <input 
                                 type="number"
                                 min={1}
                                 max={selectedProduct.quantity}
-                                className="w-full border rounded px-2 py-1"
+                                className="w-16 styled-input border rounded px-2 py-1 text-center"
                                 value={quantity}
                                 onChange={e => setQuantity(Math.max(1, Number(e.target.value)))}
                                 />
+                                                                <button onClick={() => setQuantity(prev => Math.max(1, prev + 1))}  disabled={quantity >= selectedProduct.quantity} className='px-2 py-1 bg-gray-200 rounded hover:bg-gray-30'>+</button>
+
+                                </div>
                         </div>
-                        <div className="mb-4">
-                            <label className="block mb-1 font-medium">Price per unit: Rs {selectedProduct.price}</label>
-                        </div>
+                     
                         <div className="flex justify-end gap-2">
                             <button
                                 className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
