@@ -15,6 +15,7 @@ import Orders from './Pages/Orders/Order'
 import AdminRoute from './AuthCheck/AdminCheck'
 import Success from './Pages/payments/Success'
 import Failure from './Pages/payments/Failure'
+import Deliveries from './Pages/Admin/Deliveries'
 function MainLayout() {
   return (
     <>
@@ -81,6 +82,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
+        <Route path ="/delivery" element={<Deliveries/>} />
 
          <Route path='/payment'>
   <Route path='success' element={<Success/>} />
